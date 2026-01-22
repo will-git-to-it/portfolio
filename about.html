@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Will Brennan - Portfolio</title>
+    <title>About - Will Brennan</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -142,7 +142,6 @@
         .cursor-dot.hovering {
             transform: translate(-50%, -50%) scale(1.5);
         }
-        
 
         /* Header */
         header {
@@ -290,10 +289,6 @@
             transition-delay: 0.4s;
         }
 
-        .menu-overlay.active .menu-links li:nth-child(5) {
-            transition-delay: 0.5s;
-        }
-
         .menu-links a {
             font-family: 'Tartuffo', serif;
             font-size: clamp(2.5rem, 6vw, 4rem);
@@ -324,7 +319,7 @@
         .menu-overlay.active .menu-social {
             opacity: 1;
             transform: translateY(0);
-            transition-delay: 0.6s;
+            transition-delay: 0.5s;
         }
 
         .menu-social a {
@@ -339,50 +334,19 @@
         .menu-social a:hover {
             color: var(--accent);
         }
-        
-        nav a {
-            color: var(--text-light);
-            text-decoration: none;
-            font-size: 0.9rem;
-            letter-spacing: 0.02em;
-            transition: color 0.3s;
-            position: relative;
-            padding: 0.5rem 0;
-        }
 
-        nav a::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 0;
-            width: 0;
-            height: 1px;
-            background: var(--accent);
-            transition: width 0.3s ease;
-        }
-
-        nav a:hover {
-            color: var(--text);
-        }
-
-        nav a:hover::after {
-            width: 100%;
-        }
-
-        /* Hero Section */
-        .hero {
+        /* About Section */
+        .about {
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 0 2rem;
-            position: relative;
+            padding: 8rem 4rem;
+            max-width: 900px;
+            margin: 0 auto;
         }
 
-        .hero-content {
-            max-width: 900px;
-            width: 100%;
-            margin: 0 auto;
+        .about-content {
             opacity: 0;
             animation: fadeInUp 1s ease-out 0.3s forwards;
         }
@@ -398,36 +362,6 @@
             }
         }
 
-        .hero-greeting {
-            font-family: 'Tartuffo', serif;
-            font-size: clamp(3rem, 8vw, 72px);
-            font-weight: 300;
-            line-height: 1.2;
-            letter-spacing: -0.02em;
-            color: var(--text);
-            margin-bottom: 2rem;
-        }
-        
-        .hero h1 {
-            font-family: 'Tartuffo', serif;
-            font-size: clamp(2rem, 6vw, 72px);
-            font-weight: 100;
-            line-height: 1.2;
-            margin-bottom: 1.5rem;
-            letter-spacing: -0.02em;
-            color: var(--text-light);
-            max-width: 100%;
-        }
-
-        .hero p {
-            font-size: clamp(1rem, 2vw, 1.3rem);
-            color: var(--text-light);
-            max-width: 100%;
-            font-weight: 400;
-            line-height: 1.6;
-        }
-
-
         .section-title {
             font-family: 'Tartuffo', serif;
             font-size: clamp(2.5rem, 5vw, 3.5rem);
@@ -436,152 +370,12 @@
             letter-spacing: -0.02em;
         }
 
-        /* Projects Section */
-        .projects {
-            padding: 4rem 4rem 8rem;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .project-grid {
-            display: grid;
-            gap: 6rem;
-            margin-top: 4rem;
-        }
-
-        .project-card {
-            display: grid;
-            grid-template-columns: 1.2fr 1fr;
-            gap: 4rem;
-            align-items: center;
-            opacity: 0;
-            transform: translateY(60px);
-            transition: all 0.8s ease-out;
-        }
-
-        .project-card.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .project-card:nth-child(even) {
-            grid-template-columns: 1fr 1.2fr;
-        }
-
-        .project-card:nth-child(even) .project-image {
-            order: 2;
-        }
-
-        .project-image {
-            position: relative;
-            aspect-ratio: 16/10;
-            background: linear-gradient(135deg, #2d5550 0%, #1f4440 100%);
-            border-radius: 4px;
-            overflow: hidden;
-            cursor: pointer;
-            transition: transform 0.5s ease;
-        }
-
-        .project-image:hover {
-            transform: scale(1.02);
-        }
-
-        .project-image::after {
-            content: 'VIEW PROJECT';
-            position: absolute;
-            inset: 0;
-            background: rgba(124, 201, 168, 0.95);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--bg);
-            font-size: 0.9rem;
-            font-weight: 600;
-            letter-spacing: 0.15em;
-            opacity: 0;
-            transition: opacity 0.3s;
-            z-index: 2;
-        }
-
-        .project-image:hover::after {
-            opacity: 1;
-        }
-
-        .project-info h3 {
-            font-family: 'Tartuffo', serif;
-            font-size: clamp(1.75rem, 4vw, 2.75rem);
-            font-weight: 500;
-            margin-bottom: 1rem;
-            letter-spacing: -0.02em;
-        }
-
-        .project-info p {
+        .about-text p {
+            font-size: clamp(1rem, 2vw, 1.15rem);
             color: var(--text-light);
-            font-size: clamp(0.95rem, 2vw, 1.05rem);
-            line-height: 1.75;
             margin-bottom: 1.5rem;
+            line-height: 1.75;
             font-weight: 400;
-        }
-
-        .project-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.75rem;
-            margin-top: 1.5rem;
-        }
-
-        .tag {
-            font-size: 0.85rem;
-            color: var(--accent);
-            font-weight: 500;
-            letter-spacing: 0.05em;
-        }
-
-        /* Contact Section */
-        .contact {
-            padding: 8rem 4rem;
-            background: linear-gradient(180deg, var(--bg) 0%, #0f2623 100%);
-            text-align: center;
-        }
-
-        .contact h2 {
-            font-family: 'Tartuffo', serif;
-            font-size: clamp(2.5rem, 6vw, 4.5rem);
-            font-weight: 500;
-            margin-bottom: 2rem;
-            letter-spacing: -0.02em;
-        }
-
-        .contact p {
-            font-size: clamp(1rem, 2vw, 1.25rem);
-            color: var(--text-light);
-            margin-bottom: 3rem;
-        }
-
-        .contact-links {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .contact-link {
-            padding: 1rem 2.5rem;
-            border: 2px solid var(--text-light);
-            color: var(--text);
-            text-decoration: none;
-            font-size: 0.95rem;
-            font-weight: 500;
-            letter-spacing: 0.05em;
-            transition: all 0.3s;
-            border-radius: 50px;
-        }
-
-        .contact-link:hover {
-            background: transparent;
-            border-color: var(--accent);
-            color: var(--text);
-            transform: translateY(-2px);
         }
 
         /* Footer */
@@ -594,26 +388,6 @@
         }
 
         /* Responsive */
-        @media (max-width: 1024px) {
-            header {
-                padding: 1.5rem 2rem;
-            }
-
-            .projects {
-                padding: 4rem 3rem 6rem;
-            }
-
-            .project-card,
-            .project-card:nth-child(even) {
-                grid-template-columns: 1fr;
-                gap: 2.5rem;
-            }
-
-            .project-card:nth-child(even) .project-image {
-                order: 1;
-            }
-        }
-
         @media (max-width: 768px) {
             header {
                 padding: 1.5rem 1.5rem;
@@ -643,25 +417,8 @@
                 margin-top: 2rem;
             }
 
-            .hero {
-                padding: 0 1.5rem;
-            }
-
-            .projects {
-                padding: 4rem 1.5rem;
-            }
-
-            .project-card,
-            .project-card:nth-child(even) {
-                gap: 2rem;
-            }
-
-            .contact {
-                padding: 4rem 1.5rem;
-            }
-
-            .contact-links {
-                gap: 1rem;
+            .about {
+                padding: 6rem 1.5rem;
             }
 
             footer {
@@ -708,29 +465,8 @@
                 font-size: 0.85rem;
             }
 
-            .hero {
-                padding: 0 1rem;
-            }
-
-            .projects {
-                padding: 3rem 1rem;
-            }
-
-            .project-tags {
-                gap: 0.5rem;
-            }
-
-            .tag {
-                font-size: 0.75rem;
-            }
-
-            .contact {
-                padding: 3rem 1rem;
-            }
-
-            .contact-link {
-                padding: 0.875rem 2rem;
-                font-size: 0.85rem;
+            .about {
+                padding: 4rem 1rem;
             }
 
             footer {
@@ -757,76 +493,25 @@
         <div class="menu-content">
             <ul class="menu-links">
                 <li><a href="portfolio.html">Home</a></li>
-                <li><a href="#work">Work</a></li>
+                <li><a href="portfolio.html#work">Work</a></li>
                 <li><a href="about.html">About</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li><a href="portfolio.html#contact">Contact</a></li>
             </ul>
             <div class="menu-social">
                 <a href="https://linkedin.com" target="_blank">LINKEDIN</a>
                 <a href="https://github.com" target="_blank">GITHUB</a>
-                <a href="/cdn-cgi/l/email-protection#2b5244585f034845494146024841496b4e534a465b474e05484446">EMAIL</a>
+                <a href="/cdn-cgi/l/email-protection#610819050248030b070f0a2104190008150904004f020e0c">EMAIL</a>
             </div>
         </div>
     </div>
 
-    <section class="hero">
-        <div class="hero-content">
-            <div class="hero-greeting">Hello! My name is Will.</div>
-            <h1>I create <span style="font-style: italic;">accessible, empathetic</span> experiences that empower people to do their best work.</h1>
-        </div>
-    </section>
-
-    <section class="projects" id="work">
-        <h2 class="section-title">Selected Work</h2>
-        <div class="project-grid">
-            <article class="project-card">
-                <div class="project-image"></div>
-                <div class="project-info">
-                    <h3>Project One</h3>
-                    <p>A comprehensive brand identity and digital platform for a sustainable fashion startup. The design emphasizes minimalism and eco-consciousness through natural colors and clean typography.</p>
-                    <div class="project-tags">
-                        <span class="tag">BRANDING</span>
-                        <span class="tag">WEB DESIGN</span>
-                        <span class="tag">DEVELOPMENT</span>
-                    </div>
-                </div>
-            </article>
-
-            <article class="project-card">
-                <div class="project-image"></div>
-                <div class="project-info">
-                    <h3>Project Two</h3>
-                    <p>An interactive portfolio platform for a contemporary art gallery, featuring fluid animations and an elegant content management system for showcasing exhibitions.</p>
-                    <div class="project-tags">
-                        <span class="tag">UI/UX</span>
-                        <span class="tag">REACT</span>
-                        <span class="tag">ANIMATION</span>
-                    </div>
-                </div>
-            </article>
-
-            <article class="project-card">
-                <div class="project-image"></div>
-                <div class="project-info">
-                    <h3>Project Three</h3>
-                    <p>A mobile-first e-commerce experience for artisanal goods, built with performance and accessibility at its core. Features include advanced filtering and seamless checkout.</p>
-                    <div class="project-tags">
-                        <span class="tag">E-COMMERCE</span>
-                        <span class="tag">MOBILE</span>
-                        <span class="tag">SHOPIFY</span>
-                    </div>
-                </div>
-            </article>
-        </div>
-    </section>
-
-    <section class="contact" id="contact">
-        <h2>Let's work together</h2>
-        <p>Have a project in mind? I'd love to hear about it.</p>
-        <div class="contact-links">
-            <a href="/cdn-cgi/l/email-protection#a6dfc9d3d488c3cbc7cfcae6c3dec7cbd6cac388c5c9cb" class="contact-link">EMAIL</a>
-            <a href="https://linkedin.com" target="_blank" class="contact-link">LINKEDIN</a>
-            <a href="https://github.com" target="_blank" class="contact-link">GITHUB</a>
+    <section class="about">
+        <div class="about-content">
+            <h2 class="section-title">About</h2>
+            <div class="about-text">
+                <p>I'm a designer and developer passionate about creating meaningful digital experiences. With a focus on clean aesthetics and intuitive interactions, I help brands tell their stories through thoughtful design.</p>
+                <p>My approach combines strategic thinking with meticulous execution, ensuring every project not only looks beautiful but functions flawlessly.</p>
+            </div>
         </div>
     </section>
 
@@ -876,7 +561,6 @@
 
             // Custom cursor with color swap
             const cursorDot = document.querySelector('.cursor-dot');
-            console.log('Cursor dot element:', cursorDot);
             let currentHoveredElement = null;
             
             if (!cursorDot) {
@@ -887,9 +571,7 @@
             // Interactive elements that trigger cursor scale
             const interactiveSelectors = [
                 'a', 'button',
-                '.hero-greeting',
                 'h1', 'h2', 'h3',
-                '.contact-link',
                 '.logo'
             ];
             
@@ -926,40 +608,7 @@
                 cursorDot.classList.remove('hovering');
                 currentHoveredElement = null;
             });
-
-        // Scroll animations for project cards
-        const observerOptions = {
-            threshold: 0.2,
-            rootMargin: '0px 0px -100px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach((entry, index) => {
-                if (entry.isIntersecting) {
-                    setTimeout(() => {
-                        entry.target.classList.add('visible');
-                    }, index * 200);
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.project-card').forEach(card => {
-            observer.observe(card);
         });
-
-        // Smooth scroll for navigation
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        });
-    });
     </script>
 </body>
 </html>
