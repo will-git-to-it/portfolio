@@ -106,6 +106,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            cursor: none !important;
         }
 
         body {
@@ -115,16 +116,17 @@
             line-height: 1.7;
             overflow-x: hidden;
             font-weight: 400;
+            cursor: none;
         }
 
         .cursor-dot {
             width: 20px;
             height: 20px;
-            background: #EDEDE1;
+            background: #FFFDD0;
             border-radius: 50%;
             position: fixed;
             pointer-events: none;
-            z-index: 9999;
+            z-index: 10000;
             transition: transform 0.15s ease-out;
             opacity: 0;
             mix-blend-mode: difference;
@@ -400,7 +402,7 @@
 
         .hero-greeting {
             font-family: 'Tartuffo', serif;
-            font-size: clamp(3rem, 8vw, 72px);
+            font-size: clamp(2.5rem, 6vw, 4rem);
             font-weight: 300;
             line-height: 1.2;
             letter-spacing: -0.02em;
@@ -410,7 +412,7 @@
         
         .hero h1 {
             font-family: 'Tartuffo', serif;
-            font-size: clamp(2rem, 6vw, 72px);
+            font-size: clamp(1.75rem, 4.5vw, 3rem);
             font-weight: 100;
             line-height: 1.2;
             margin-bottom: 1.5rem;
@@ -420,7 +422,7 @@
         }
 
         .hero p {
-            font-size: clamp(1rem, 2vw, 1.3rem);
+            font-size: clamp(0.95rem, 1.5vw, 1.15rem);
             color: var(--text-light);
             max-width: 100%;
             font-weight: 400;
@@ -431,7 +433,7 @@
         .section-title {
             font-family: 'Tartuffo', serif;
             font-size: clamp(2.5rem, 5vw, 3.5rem);
-            font-weight: 500;
+            font-weight: 300;
             margin-bottom: 3rem;
             letter-spacing: -0.02em;
         }
@@ -479,7 +481,9 @@
             border-radius: 4px;
             overflow: hidden;
             cursor: pointer;
-            transition: transform 0.5s ease;
+            transition: transform 0.3s ease;
+            transform-style: preserve-3d;
+            perspective: 1000px;
         }
 
         .project-image:hover {
@@ -547,7 +551,7 @@
         .contact h2 {
             font-family: 'Tartuffo', serif;
             font-size: clamp(2.5rem, 6vw, 4.5rem);
-            font-weight: 500;
+            font-weight: 300;
             margin-bottom: 2rem;
             letter-spacing: -0.02em;
         }
@@ -945,6 +949,33 @@
 
         document.querySelectorAll('.project-card').forEach(card => {
             observer.observe(card);
+        });
+
+        // Mouse-responsive rotation for project images
+        const projectImages = document.querySelectorAll('.project-image');
+        
+        projectImages.forEach(image => {
+            image.addEventListener('mousemove', (e) => {
+                const rect = image.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+                
+                // Calculate mouse position relative to center (-1 to 1)
+                const mouseX = (e.clientX - centerX) / (rect.width / 2);
+                const mouseY = (e.clientY - centerY) / (rect.height / 2);
+                
+                // Calculate rotation angles (max ±12 degrees)
+                const rotateY = mouseX * 12;
+                const rotateX = -mouseY * 12;
+                
+                // Apply transform with scale
+                image.style.transform = `scale(1.02) perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            });
+            
+            image.addEventListener('mouseleave', () => {
+                // Reset rotation smoothly
+                image.style.transform = 'scale(1) perspective(1000px) rotateX(0deg) rotateY(0deg)';
+            });
         });
 
         // Smooth scroll for navigation
