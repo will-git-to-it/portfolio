@@ -219,13 +219,14 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 0 4rem;
+            padding: 0 2rem;
             position: relative;
         }
 
         .hero-content {
             max-width: 900px;
-            padding-left: clamp(2rem, 24.8vw, 357px);
+            width: 100%;
+            margin: 0 auto;
             opacity: 0;
             animation: fadeInUp 1s ease-out 0.3s forwards;
         }
@@ -243,7 +244,7 @@
 
         .hero-greeting {
             font-family: 'Beverly Drive Right TRIAL', cursive;
-            font-size: 72px;
+            font-size: clamp(3rem, 8vw, 72px);
             font-weight: 400;
             line-height: 1.376;
             letter-spacing: normal;
@@ -253,19 +254,19 @@
         
         .hero h1 {
             font-family: 'Tartuffo', serif;
-            font-size: 72px;
+            font-size: clamp(2rem, 6vw, 72px);
             font-weight: 100;
             line-height: 1.2;
             margin-bottom: 1.5rem;
             letter-spacing: -0.02em;
             color: var(--text-light);
-            max-width: 777px;
+            max-width: 100%;
         }
 
         .hero p {
-            font-size: 1.3rem;
+            font-size: clamp(1rem, 2vw, 1.3rem);
             color: var(--text-light);
-            max-width: 650px;
+            max-width: 100%;
             font-weight: 400;
             line-height: 1.6;
         }
@@ -280,7 +281,7 @@
 
         .section-title {
             font-family: 'Tartuffo', serif;
-            font-size: 3.5rem;
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
             font-weight: 500;
             margin-bottom: 3rem;
             letter-spacing: -0.02em;
@@ -294,7 +295,7 @@
         }
 
         .about-text p {
-            font-size: 1.15rem;
+            font-size: clamp(1rem, 2vw, 1.15rem);
             color: var(--text-light);
             margin-bottom: 1.5rem;
             line-height: 1.75;
@@ -396,7 +397,7 @@
 
         .project-info h3 {
             font-family: 'Tartuffo', serif;
-            font-size: 2.75rem;
+            font-size: clamp(1.75rem, 4vw, 2.75rem);
             font-weight: 500;
             margin-bottom: 1rem;
             letter-spacing: -0.02em;
@@ -404,7 +405,7 @@
 
         .project-info p {
             color: var(--text-light);
-            font-size: 1.05rem;
+            font-size: clamp(0.95rem, 2vw, 1.05rem);
             line-height: 1.75;
             margin-bottom: 1.5rem;
             font-weight: 400;
@@ -433,14 +434,14 @@
 
         .contact h2 {
             font-family: 'Tartuffo', serif;
-            font-size: 4.5rem;
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
             font-weight: 500;
             margin-bottom: 2rem;
             letter-spacing: -0.02em;
         }
 
         .contact p {
-            font-size: 1.25rem;
+            font-size: clamp(1rem, 2vw, 1.25rem);
             color: var(--text-light);
             margin-bottom: 3rem;
         }
@@ -481,61 +482,132 @@
         }
 
         /* Responsive */
-        @media (max-width: 768px) {
+        @media (max-width: 1024px) {
             header {
                 padding: 1.5rem 2rem;
+            }
+
+            .about {
+                padding: 6rem 3rem;
+            }
+
+            .about-grid {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .projects {
+                padding: 4rem 3rem 6rem;
+            }
+
+            .project-card,
+            .project-card:nth-child(even) {
+                grid-template-columns: 1fr;
+                gap: 2.5rem;
+            }
+
+            .project-card:nth-child(even) .project-image {
+                order: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 1.5rem 1.5rem;
             }
 
             nav {
                 gap: 1.5rem;
             }
 
+            .menu-text {
+                font-size: 18px;
+            }
+
             .hero {
-                padding: 0 2rem;
-            }
-            
-            .hero-greeting {
-                font-size: clamp(2.5rem, 8vw, 72px);
-            }
-            
-            .hero h1 {
-                font-size: clamp(1.75rem, 6vw, 72px);
-                max-width: 100%;
-            }
-            
-            .hero-content {
-                padding-left: 0;
+                padding: 0 1.5rem;
             }
 
             .about {
-                padding: 4rem 2rem;
+                padding: 4rem 1.5rem;
             }
 
             .about-grid {
-                grid-template-columns: 1fr;
                 gap: 2rem;
             }
 
             .projects {
-                padding: 4rem 2rem;
+                padding: 4rem 1.5rem;
             }
 
             .project-card,
             .project-card:nth-child(even) {
-                grid-template-columns: 1fr;
                 gap: 2rem;
             }
 
-            .project-card:nth-child(even) .project-image {
-                order: 1;
+            .contact {
+                padding: 4rem 1.5rem;
+            }
+
+            .contact-links {
+                gap: 1rem;
+            }
+
+            footer {
+                padding: 2rem 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header {
+                padding: 1rem 1rem;
+            }
+
+            .logo {
+                width: 30px;
+                height: 22px;
+            }
+
+            nav {
+                gap: 1rem;
+            }
+
+            .menu-text {
+                font-size: 16px;
+            }
+
+            .hero {
+                padding: 0 1rem;
+            }
+
+            .about {
+                padding: 3rem 1rem;
+            }
+
+            .projects {
+                padding: 3rem 1rem;
+            }
+
+            .project-tags {
+                gap: 0.5rem;
+            }
+
+            .tag {
+                font-size: 0.75rem;
             }
 
             .contact {
-                padding: 4rem 2rem;
+                padding: 3rem 1rem;
             }
 
-            .contact h2 {
-                font-size: 2.5rem;
+            .contact-link {
+                padding: 0.875rem 2rem;
+                font-size: 0.85rem;
+            }
+
+            footer {
+                padding: 2rem 1rem;
+                font-size: 0.85rem;
             }
         }
     </style>
@@ -567,7 +639,7 @@
                 <p>My approach combines strategic thinking with meticulous execution, ensuring every project not only looks beautiful but functions flawlessly.</p>
             </div>
             <div>
-                <h3 style="font-family: 'Tartuffo', serif; font-size: 1.75rem; margin-bottom: 1rem; font-weight: 500;">Skills</h3>
+                <h3 style="font-family: 'Tartuffo', serif; font-size: clamp(1.5rem, 3vw, 1.75rem); margin-bottom: 1rem; font-weight: 500;">Skills</h3>
                 <div class="skills">
                     <span class="skill-tag">UI/UX Design</span>
                     <span class="skill-tag">Web Development</span>
