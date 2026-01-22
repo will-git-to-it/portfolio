@@ -3,17 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Name - Portfolio</title>
+    <title>Will Brennan - Portfolio</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Work+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        @font-face {
+            font-family: 'Beverly Drive Right TRIAL';
+            src: url('fonts/BeverlyDriveRightTRIAL-Regular.otf') format('opentype');
+            font-weight: 400;
+            font-style: normal;
+            font-display: swap;
+        }
+        
+        @font-face {
+            font-family: 'Beverly Drive Right TRIAL';
+            src: url('fonts/BeverlyDriveRightTRIAL-Bold.otf') format('opentype');
+            font-weight: 700;
+            font-style: normal;
+            font-display: swap;
+        }
+        
+        @font-face {
+            font-family: 'Beverly Drive Right TRIAL';
+            src: url('fonts/BeverlyDriveRightTRIAL-Extrabold.otf') format('opentype');
+            font-weight: 800;
+            font-style: normal;
+            font-display: swap;
+        }
+        
+        @font-face {
+            font-family: 'Beverly Drive Right TRIAL';
+            src: url('fonts/BeverlyDriveRightTRIAL-Black.otf') format('opentype');
+            font-weight: 900;
+            font-style: normal;
+            font-display: swap;
+        }
+        
+        @font-face {
+            font-family: 'Tartuffo';
+            src: url('fonts/Tartuffo-Regular.woff2') format('woff2'),
+                 url('fonts/Tartuffo-Regular.woff') format('woff');
+            font-weight: 400;
+            font-style: normal;
+            font-display: swap;
+        }
+        
+        @font-face {
+            font-family: 'Tartuffo';
+            src: url('fonts/Tartuffo-Medium.woff2') format('woff2'),
+                 url('fonts/Tartuffo-Medium.woff') format('woff');
+            font-weight: 500;
+            font-style: normal;
+            font-display: swap;
+        }
+        
+        @font-face {
+            font-family: 'Tartuffo';
+            src: url('fonts/Tartuffo-Thin.woff2') format('woff2'),
+                 url('fonts/Tartuffo-Thin.woff') format('woff');
+            font-weight: 100;
+            font-style: normal;
+            font-display: swap;
+        }
+        
+        @font-face {
+            font-family: 'Tartuffo';
+            src: url('fonts/Tartuffo-Light.woff2') format('woff2'),
+                 url('fonts/Tartuffo-Light.woff') format('woff');
+            font-weight: 300;
+            font-style: normal;
+            font-display: swap;
+        }
+        
+        @font-face {
+            font-family: 'Tartuffo';
+            src: url('fonts/Tartuffo-Bold.woff2') format('woff2'),
+                 url('fonts/Tartuffo-Bold.woff') format('woff');
+            font-weight: 700;
+            font-style: normal;
+            font-display: swap;
+        }
+
         :root {
-            --bg: #fafaf8;
-            --text: #1a1a1a;
-            --text-light: #666;
-            --accent: #2d5f3f;
-            --border: #e0e0dc;
+            --bg: #002F21;
+            --text: #FFFFFF;
+            --text-light: #EDEDE1;
+            --accent: #7cc9a8;
+            --border: #2d5550;
         }
 
         * {
@@ -23,23 +100,26 @@
         }
 
         body {
-            font-family: 'Work Sans', sans-serif;
+            font-family: 'Montserrat', sans-serif;
             background: var(--bg);
             color: var(--text);
-            line-height: 1.6;
+            line-height: 1.7;
             overflow-x: hidden;
+            font-weight: 400;
         }
 
         .cursor-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--accent);
+            width: 20px;
+            height: 20px;
+            background: #EDEDE1;
             border-radius: 50%;
             position: fixed;
             pointer-events: none;
             z-index: 9999;
-            transition: transform 0.15s ease-out, opacity 0.3s;
+            transition: transform 0.15s ease-out;
             opacity: 0;
+            mix-blend-mode: difference;
+            transform: translate(-50%, -50%);
         }
 
         .cursor-dot.visible {
@@ -47,8 +127,13 @@
         }
 
         .cursor-dot.clicked {
-            transform: scale(3);
+            transform: translate(-50%, -50%) scale(2);
         }
+        
+        .cursor-dot.hovering {
+            transform: translate(-50%, -50%) scale(1.5);
+        }
+        
 
         /* Header */
         header {
@@ -56,12 +141,12 @@
             top: 0;
             left: 0;
             right: 0;
-            padding: 2rem 4rem;
+            padding: 2rem 2.85rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
             z-index: 1000;
-            background: linear-gradient(180deg, var(--bg) 0%, transparent 100%);
+            background: linear-gradient(180deg, rgba(0, 47, 33, 0.9) 0%, transparent 100%);
             animation: slideDown 0.8s ease-out;
         }
 
@@ -77,10 +162,14 @@
         }
 
         .logo {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.5rem;
-            font-weight: 500;
-            letter-spacing: -0.02em;
+            display: block;
+            width: 35px;
+            height: 26px;
+        }
+        
+        .logo img {
+            width: 100%;
+            height: 100%;
         }
 
         nav {
@@ -88,6 +177,14 @@
             gap: 2.5rem;
         }
 
+        .menu-text {
+            font-family: 'Tartuffo', serif;
+            font-weight: 300;
+            font-size: 20px;
+            letter-spacing: -0.02em;
+            color: var(--text);
+        }
+        
         nav a {
             color: var(--text-light);
             text-decoration: none;
@@ -128,6 +225,7 @@
 
         .hero-content {
             max-width: 900px;
+            padding-left: clamp(2rem, 24.8vw, 357px);
             opacity: 0;
             animation: fadeInUp 1s ease-out 0.3s forwards;
         }
@@ -143,42 +241,35 @@
             }
         }
 
-        .hero h1 {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: clamp(3rem, 8vw, 6rem);
+        .hero-greeting {
+            font-family: 'Beverly Drive Right TRIAL', cursive;
+            font-size: 72px;
             font-weight: 400;
-            line-height: 1.1;
+            line-height: 1.376;
+            letter-spacing: normal;
+            color: var(--text);
+            margin-bottom: 2rem;
+        }
+        
+        .hero h1 {
+            font-family: 'Tartuffo', serif;
+            font-size: 72px;
+            font-weight: 100;
+            line-height: 1.2;
             margin-bottom: 1.5rem;
-            letter-spacing: -0.03em;
+            letter-spacing: -0.02em;
+            color: var(--text-light);
+            max-width: 777px;
         }
 
         .hero p {
-            font-size: 1.25rem;
+            font-size: 1.3rem;
             color: var(--text-light);
-            max-width: 600px;
-            font-weight: 300;
+            max-width: 650px;
+            font-weight: 400;
+            line-height: 1.6;
         }
 
-        .scroll-indicator {
-            position: absolute;
-            bottom: 4rem;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 0.85rem;
-            color: var(--text-light);
-            letter-spacing: 0.1em;
-            opacity: 0;
-            animation: fadeIn 1s ease-out 1.5s forwards, float 2s ease-in-out infinite;
-        }
-
-        @keyframes fadeIn {
-            to { opacity: 1; }
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateX(-50%) translateY(0); }
-            50% { transform: translateX(-50%) translateY(10px); }
-        }
 
         /* About Section */
         .about {
@@ -188,9 +279,9 @@
         }
 
         .section-title {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 3rem;
-            font-weight: 400;
+            font-family: 'Tartuffo', serif;
+            font-size: 3.5rem;
+            font-weight: 500;
             margin-bottom: 3rem;
             letter-spacing: -0.02em;
         }
@@ -203,10 +294,11 @@
         }
 
         .about-text p {
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             color: var(--text-light);
             margin-bottom: 1.5rem;
-            line-height: 1.8;
+            line-height: 1.75;
+            font-weight: 400;
         }
 
         .skills {
@@ -271,7 +363,7 @@
         .project-image {
             position: relative;
             aspect-ratio: 16/10;
-            background: linear-gradient(135deg, #f5f5f0 0%, #e8e8e0 100%);
+            background: linear-gradient(135deg, #2d5550 0%, #1f4440 100%);
             border-radius: 4px;
             overflow: hidden;
             cursor: pointer;
@@ -286,12 +378,13 @@
             content: 'VIEW PROJECT';
             position: absolute;
             inset: 0;
-            background: rgba(45, 95, 63, 0.9);
+            background: rgba(124, 201, 168, 0.95);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
+            color: var(--bg);
             font-size: 0.9rem;
+            font-weight: 600;
             letter-spacing: 0.15em;
             opacity: 0;
             transition: opacity 0.3s;
@@ -302,8 +395,8 @@
         }
 
         .project-info h3 {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 2.5rem;
+            font-family: 'Tartuffo', serif;
+            font-size: 2.75rem;
             font-weight: 500;
             margin-bottom: 1rem;
             letter-spacing: -0.02em;
@@ -311,8 +404,10 @@
 
         .project-info p {
             color: var(--text-light);
-            line-height: 1.8;
+            font-size: 1.05rem;
+            line-height: 1.75;
             margin-bottom: 1.5rem;
+            font-weight: 400;
         }
 
         .project-tags {
@@ -332,14 +427,14 @@
         /* Contact Section */
         .contact {
             padding: 8rem 4rem;
-            background: linear-gradient(180deg, var(--bg) 0%, #f0f0ec 100%);
+            background: linear-gradient(180deg, var(--bg) 0%, #0f2623 100%);
             text-align: center;
         }
 
         .contact h2 {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 4rem;
-            font-weight: 400;
+            font-family: 'Tartuffo', serif;
+            font-size: 4.5rem;
+            font-weight: 500;
             margin-bottom: 2rem;
             letter-spacing: -0.02em;
         }
@@ -359,10 +454,11 @@
 
         .contact-link {
             padding: 1rem 2.5rem;
-            border: 2px solid var(--text);
+            border: 2px solid var(--text-light);
             color: var(--text);
             text-decoration: none;
             font-size: 0.95rem;
+            font-weight: 500;
             letter-spacing: 0.05em;
             transition: all 0.3s;
             border-radius: 50px;
@@ -371,7 +467,7 @@
         .contact-link:hover {
             background: var(--accent);
             border-color: var(--accent);
-            color: white;
+            color: var(--bg);
             transform: translateY(-2px);
         }
 
@@ -396,6 +492,19 @@
 
             .hero {
                 padding: 0 2rem;
+            }
+            
+            .hero-greeting {
+                font-size: clamp(2.5rem, 8vw, 72px);
+            }
+            
+            .hero h1 {
+                font-size: clamp(1.75rem, 6vw, 72px);
+                max-width: 100%;
+            }
+            
+            .hero-content {
+                padding-left: 0;
             }
 
             .about {
@@ -435,20 +544,19 @@
     <div class="cursor-dot"></div>
 
     <header>
-        <div class="logo">Your Name</div>
+        <div class="logo">
+            <img src="logo.svg" alt="Logo">
+        </div>
         <nav>
-            <a href="#about">About</a>
-            <a href="#work">Work</a>
-            <a href="#contact">Contact</a>
+            <span class="menu-text">Menu</span>
         </nav>
     </header>
 
     <section class="hero">
         <div class="hero-content">
-            <h1>Designer & Developer crafting digital experiences</h1>
-            <p>Creating thoughtful, elegant solutions at the intersection of design and technology.</p>
+            <div class="hero-greeting">Hi there!</div>
+            <h1>I create accessible, empathetic experiences that empower people to do their best work.</h1>
         </div>
-        <div class="scroll-indicator">SCROLL</div>
     </section>
 
     <section class="about" id="about">
@@ -459,7 +567,7 @@
                 <p>My approach combines strategic thinking with meticulous execution, ensuring every project not only looks beautiful but functions flawlessly.</p>
             </div>
             <div>
-                <h3 style="font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; margin-bottom: 1rem;">Skills</h3>
+                <h3 style="font-family: 'Tartuffo', serif; font-size: 1.75rem; margin-bottom: 1rem; font-weight: 500;">Skills</h3>
                 <div class="skills">
                     <span class="skill-tag">UI/UX Design</span>
                     <span class="skill-tag">Web Development</span>
@@ -529,23 +637,64 @@
     </section>
 
     <footer>
-        <p>&copy; 2026 Your Name. All rights reserved.</p>
+        <p>&copy; 2026 Will Brennan. All rights reserved.</p>
     </footer>
 
     <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-        // Custom cursor
-        const cursorDot = document.querySelector('.cursor-dot');
-        
-        document.addEventListener('mousemove', (e) => {
-            cursorDot.style.left = e.clientX + 'px';
-            cursorDot.style.top = e.clientY + 'px';
-            cursorDot.classList.add('visible');
-        });
+        document.addEventListener('DOMContentLoaded', function() {
+            // Custom cursor with color swap
+            const cursorDot = document.querySelector('.cursor-dot');
+            console.log('Cursor dot element:', cursorDot);
+            let currentHoveredElement = null;
+            
+            if (!cursorDot) {
+                console.error('Cursor dot element not found!');
+                return;
+            }
+            
+            // Interactive elements that trigger cursor scale
+            const interactiveSelectors = [
+                'a', 'button',
+                '.hero-greeting',
+                'h1', 'h2', 'h3',
+                '.skill-tag',
+                '.contact-link',
+                '.logo'
+            ];
+            
+            document.addEventListener('mousemove', (e) => {
+                cursorDot.style.left = e.clientX + 'px';
+                cursorDot.style.top = e.clientY + 'px';
+                cursorDot.classList.add('visible');
+            
+                // Get element under cursor (excluding the cursor dot itself)
+                const elementsUnderCursor = document.elementsFromPoint(e.clientX, e.clientY);
+                const interactiveElement = elementsUnderCursor.find(el => 
+                    el !== cursorDot && 
+                    interactiveSelectors.some(selector => el.matches(selector))
+                );
+                
+                // Scale cursor when over interactive elements
+                if (interactiveElement) {
+                    cursorDot.classList.add('hovering');
+                    currentHoveredElement = interactiveElement;
+                } else {
+                    cursorDot.classList.remove('hovering');
+                    currentHoveredElement = null;
+                }
+            });
 
-        document.addEventListener('click', () => {
-            cursorDot.classList.add('clicked');
-            setTimeout(() => cursorDot.classList.remove('clicked'), 300);
-        });
+            document.addEventListener('click', () => {
+                cursorDot.classList.add('clicked');
+                setTimeout(() => cursorDot.classList.remove('clicked'), 300);
+            });
+        
+            // Hide cursor when leaving window
+            document.addEventListener('mouseleave', () => {
+                cursorDot.classList.remove('visible');
+                cursorDot.classList.remove('hovering');
+                currentHoveredElement = null;
+            });
 
         // Scroll animations for project cards
         const observerOptions = {
@@ -574,4 +723,12 @@
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
                     target.scrollIntoView({
-                        behavi
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    });
+    </script>
+</body>
+</html>
