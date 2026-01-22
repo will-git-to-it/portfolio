@@ -106,6 +106,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            cursor: none !important;
         }
 
         body {
@@ -115,16 +116,17 @@
             line-height: 1.7;
             overflow-x: hidden;
             font-weight: 400;
+            cursor: none;
         }
 
         .cursor-dot {
             width: 20px;
             height: 20px;
-            background: #EDEDE1;
+            background: #FFFDD0;
             border-radius: 50%;
             position: fixed;
             pointer-events: none;
-            z-index: 9999;
+            z-index: 10000;
             transition: transform 0.15s ease-out;
             opacity: 0;
             mix-blend-mode: difference;
@@ -155,8 +157,13 @@
             justify-content: space-between;
             align-items: center;
             z-index: 1000;
-            background: linear-gradient(180deg, rgba(0, 47, 33, 0.9) 0%, transparent 100%);
+            background: transparent;
             animation: slideDown 0.8s ease-out;
+        }
+
+        /* Content blur zone */
+        .blur-content {
+            transition: filter 0.1s ease-out;
         }
 
         @keyframes slideDown {
@@ -210,8 +217,9 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 47, 33, 0.98);
-            backdrop-filter: blur(10px);
+            background: rgba(0, 47, 33, 0.7);
+            backdrop-filter: blur(20px) brightness(0.95);
+            -webkit-backdrop-filter: blur(20px) brightness(0.95);
             z-index: 9999;
             display: flex;
             align-items: center;
@@ -219,6 +227,16 @@
             opacity: 0;
             visibility: hidden;
             transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .menu-overlay::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='2.5' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.15'/%3E%3C/svg%3E");
+            opacity: 0.3;
+            pointer-events: none;
+            z-index: -1;
         }
 
         .menu-overlay.active {
@@ -400,7 +418,7 @@
 
         .hero-greeting {
             font-family: 'Tartuffo', serif;
-            font-size: clamp(3rem, 8vw, 72px);
+            font-size: clamp(2.5rem, 6vw, 4rem);
             font-weight: 300;
             line-height: 1.2;
             letter-spacing: -0.02em;
@@ -410,7 +428,7 @@
         
         .hero h1 {
             font-family: 'Tartuffo', serif;
-            font-size: clamp(2rem, 6vw, 72px);
+            font-size: clamp(1.75rem, 4.5vw, 3rem);
             font-weight: 100;
             line-height: 1.2;
             margin-bottom: 1.5rem;
@@ -420,7 +438,7 @@
         }
 
         .hero p {
-            font-size: clamp(1rem, 2vw, 1.3rem);
+            font-size: clamp(0.95rem, 1.5vw, 1.15rem);
             color: var(--text-light);
             max-width: 100%;
             font-weight: 400;
@@ -431,15 +449,15 @@
         .section-title {
             font-family: 'Tartuffo', serif;
             font-size: clamp(2.5rem, 5vw, 3.5rem);
-            font-weight: 500;
+            font-weight: 300;
             margin-bottom: 3rem;
             letter-spacing: -0.02em;
         }
 
         /* Projects Section */
         .projects {
-            padding: 4rem 4rem 8rem;
-            max-width: 1400px;
+            padding: 4rem 2rem 8rem;
+            max-width: 900px;
             margin: 0 auto;
         }
 
@@ -479,7 +497,9 @@
             border-radius: 4px;
             overflow: hidden;
             cursor: pointer;
-            transition: transform 0.5s ease;
+            transition: transform 0.3s ease;
+            transform-style: preserve-3d;
+            perspective: 1000px;
         }
 
         .project-image:hover {
@@ -539,7 +559,7 @@
 
         /* Contact Section */
         .contact {
-            padding: 8rem 4rem;
+            padding: 8rem 2rem;
             background: linear-gradient(180deg, var(--bg) 0%, #0f2623 100%);
             text-align: center;
         }
@@ -547,7 +567,7 @@
         .contact h2 {
             font-family: 'Tartuffo', serif;
             font-size: clamp(2.5rem, 6vw, 4.5rem);
-            font-weight: 500;
+            font-weight: 300;
             margin-bottom: 2rem;
             letter-spacing: -0.02em;
         }
@@ -586,7 +606,7 @@
 
         /* Footer */
         footer {
-            padding: 3rem 4rem;
+            padding: 3rem 2rem;
             text-align: center;
             border-top: 1px solid var(--border);
             font-size: 0.9rem;
@@ -600,7 +620,7 @@
             }
 
             .projects {
-                padding: 4rem 3rem 6rem;
+                padding: 4rem 2rem 6rem;
             }
 
             .project-card,
@@ -947,6 +967,33 @@
             observer.observe(card);
         });
 
+        // Mouse-responsive rotation for project images
+        const projectImages = document.querySelectorAll('.project-image');
+        
+        projectImages.forEach(image => {
+            image.addEventListener('mousemove', (e) => {
+                const rect = image.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+                
+                // Calculate mouse position relative to center (-1 to 1)
+                const mouseX = (e.clientX - centerX) / (rect.width / 2);
+                const mouseY = (e.clientY - centerY) / (rect.height / 2);
+                
+                // Calculate rotation angles (max ±12 degrees)
+                const rotateY = mouseX * 12;
+                const rotateX = -mouseY * 12;
+                
+                // Apply transform with scale
+                image.style.transform = `scale(1.02) perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            });
+            
+            image.addEventListener('mouseleave', () => {
+                // Reset rotation smoothly
+                image.style.transform = 'scale(1) perspective(1000px) rotateX(0deg) rotateY(0deg)';
+            });
+        });
+
         // Smooth scroll for navigation
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
@@ -959,6 +1006,7 @@
                 }
             });
         });
+
     });
     </script>
 </body>
