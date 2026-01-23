@@ -235,9 +235,20 @@
             animation: slideDown 0.8s ease-out;
         }
 
-        /* Content blur zone */
-        .blur-content {
-            transition: filter 0.1s ease-out;
+        /* Smooth performance for scroll effects - confined to top of page */
+        .hero-content,
+        .section-title,
+        .project-info h3,
+        .project-info p,
+        .project-tags {
+            transition: filter 0.3s ease-out, opacity 0.3s ease-out;
+            will-change: filter, opacity;
+        }
+        
+        /* Separate handling for images to avoid flickering */
+        .project-image {
+            transition: filter 0.25s ease-out, opacity 0.25s ease-out;
+            will-change: filter, opacity, transform;
         }
 
         @keyframes slideDown {
@@ -616,6 +627,9 @@
             transition: none;
             transform-style: preserve-3d;
             perspective: 1000px;
+            transform: translateZ(0);
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
         }
 
         .project-image:hover {
@@ -884,7 +898,7 @@
     <div class="cursor-dot"></div>
 
     <header>
-        <a href="portfolio.html" class="logo">
+        <a href="index.html" class="logo">
             <img src="logo.svg" alt="Logo">
         </a>
         <nav>
@@ -896,7 +910,7 @@
         <button class="menu-close" aria-label="Close menu">Close</button>
         <div class="menu-content">
             <ul class="menu-links">
-                <li><a href="portfolio.html">Home</a></li>
+                <li><a href="index.html">Home</a></li>
                 <li><a href="#work">Work</a></li>
                 <li><a href="about.html">About</a></li>
                 <li><a href="#contact">Contact</a></li>
@@ -1199,6 +1213,122 @@
                 }
             });
         });
+
+        // Blur and fade effect - granular element tracking confined to top of viewport
+        const header = document.querySelector('header');
+        const headerHeight = header.offsetHeight;
+        const effectZone = 250; // Only apply effect to elements in top 250px of viewport
+        
+        // Separate images from other elements for different handling
+        const textElements = document.querySelectorAll('.hero-content, .section-title, .project-info h3, .project-info p, .project-tags');
+        const imageElements = document.querySelectorAll('.project-image');
+        
+        // Track previous blur states to prevent unnecessary updates
+        const previousStates = new WeakMap();
+        
+        function applyScrollBlur() {
+            // Handle text elements with full blur logic
+            textElements.forEach(element => {
+                const rect = element.getBoundingClientRect();
+                const elementTop = rect.top;
+                const elementBottom = rect.bottom;
+                const elementHeight = rect.height;
+                
+                // ONLY apply effect if element is in the top portion of viewport
+                if (elementTop < effectZone && elementBottom > 0) {
+                    let blurIntensity = 0;
+                    let opacityValue = 1;
+                    
+                    const elementCenter = elementTop + (elementHeight / 2);
+                    
+                    if (elementCenter < headerHeight) {
+                        const distanceUnderHeader = headerHeight - elementCenter;
+                        const maxBlur = 8;
+                        const blurProgress = Math.min(distanceUnderHeader / 100, 1);
+                        
+                        blurIntensity = maxBlur * blurProgress;
+                        opacityValue = Math.max(0.3, 1 - (blurProgress * 0.6));
+                    } else if (elementTop < headerHeight && elementCenter >= headerHeight) {
+                        const overlap = headerHeight - elementTop;
+                        const overlapProgress = Math.min(overlap / elementHeight, 1);
+                        
+                        blurIntensity = 6 * overlapProgress;
+                        opacityValue = Math.max(0.4, 1 - (overlapProgress * 0.5));
+                    } else if (elementTop < effectZone) {
+                        const distanceFromHeader = elementTop - headerHeight;
+                        const zoneHeight = effectZone - headerHeight;
+                        const approachProgress = 1 - (distanceFromHeader / zoneHeight);
+                        
+                        if (approachProgress > 0.75) {
+                            const intensity = (approachProgress - 0.75) / 0.25;
+                            blurIntensity = 2 * intensity;
+                            opacityValue = 1 - (intensity * 0.08);
+                        }
+                    }
+                    
+                    if (blurIntensity > 0.1) {
+                        element.style.filter = `blur(${blurIntensity}px)`;
+                        element.style.opacity = opacityValue;
+                    } else {
+                        element.style.filter = 'none';
+                        element.style.opacity = '1';
+                    }
+                } else {
+                    element.style.filter = 'none';
+                    element.style.opacity = '1';
+                }
+            });
+            
+            // Handle images with stricter thresholds to prevent flicker
+            imageElements.forEach(element => {
+                const rect = element.getBoundingClientRect();
+                const elementTop = rect.top;
+                const elementBottom = rect.bottom;
+                
+                if (elementTop < effectZone && elementBottom > 0) {
+                    let blurIntensity = 0;
+                    let opacityValue = 1;
+                    
+                    // Only blur images when clearly under the header
+                    if (elementTop < headerHeight - 20) {
+                        const distanceUnderHeader = headerHeight - elementTop;
+                        const blurProgress = Math.min(distanceUnderHeader / 120, 1);
+                        
+                        blurIntensity = Math.round(8 * blurProgress * 10) / 10; // Round to reduce updates
+                        opacityValue = Math.max(0.35, 1 - (blurProgress * 0.55));
+                    }
+                    
+                    // Only update if the change is significant (reduce flickering)
+                    const prevState = previousStates.get(element) || { blur: 0, opacity: 1 };
+                    if (Math.abs(prevState.blur - blurIntensity) > 0.3 || Math.abs(prevState.opacity - opacityValue) > 0.05) {
+                        if (blurIntensity > 0.3) {
+                            element.style.filter = `blur(${blurIntensity}px)`;
+                            element.style.opacity = opacityValue;
+                        } else {
+                            element.style.filter = 'none';
+                            element.style.opacity = '1';
+                        }
+                        previousStates.set(element, { blur: blurIntensity, opacity: opacityValue });
+                    }
+                } else {
+                    element.style.filter = 'none';
+                    element.style.opacity = '1';
+                    previousStates.set(element, { blur: 0, opacity: 1 });
+                }
+            });
+        }
+        
+        // Apply blur effect on scroll
+        let scrollTimeout;
+        window.addEventListener('scroll', () => {
+            if (scrollTimeout) {
+                window.cancelAnimationFrame(scrollTimeout);
+            }
+            scrollTimeout = window.requestAnimationFrame(applyScrollBlur);
+        }, { passive: true });
+        
+        // Initial call to set up the effect
+        applyScrollBlur();
 
     });
     </script>
