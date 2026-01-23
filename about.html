@@ -4,39 +4,116 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About - Will Brennan</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         @font-face {
-            font-family: 'Beverly Drive Right TRIAL';
-            src: url('fonts/BeverlyDriveRightTRIAL-Regular.otf') format('opentype');
+            font-family: 'Mint Grotesk';
+            src: url('fonts/MintGrotesk-Thin.woff2') format('woff2');
+            font-weight: 100;
+            font-style: normal;
+            font-display: swap;
+        }
+        
+        @font-face {
+            font-family: 'Mint Grotesk';
+            src: url('fonts/MintGrotesk-ThinItalic.woff2') format('woff2');
+            font-weight: 100;
+            font-style: italic;
+            font-display: swap;
+        }
+        
+        @font-face {
+            font-family: 'Mint Grotesk';
+            src: url('fonts/MintGrotesk-Light.woff2') format('woff2');
+            font-weight: 300;
+            font-style: normal;
+            font-display: swap;
+        }
+        
+        @font-face {
+            font-family: 'Mint Grotesk';
+            src: url('fonts/MintGrotesk-LightItalic.woff2') format('woff2');
+            font-weight: 300;
+            font-style: italic;
+            font-display: swap;
+        }
+        
+        @font-face {
+            font-family: 'Mint Grotesk';
+            src: url('fonts/MintGrotesk-Regular.woff2') format('woff2');
             font-weight: 400;
             font-style: normal;
             font-display: swap;
         }
         
         @font-face {
-            font-family: 'Beverly Drive Right TRIAL';
-            src: url('fonts/BeverlyDriveRightTRIAL-Bold.otf') format('opentype');
+            font-family: 'Mint Grotesk';
+            src: url('fonts/MintGrotesk-Italic.woff2') format('woff2');
+            font-weight: 400;
+            font-style: italic;
+            font-display: swap;
+        }
+        
+        @font-face {
+            font-family: 'Mint Grotesk';
+            src: url('fonts/MintGrotesk-Medium.woff2') format('woff2');
+            font-weight: 500;
+            font-style: normal;
+            font-display: swap;
+        }
+        
+        @font-face {
+            font-family: 'Mint Grotesk';
+            src: url('fonts/MintGrotesk-MediumItalic.woff2') format('woff2');
+            font-weight: 500;
+            font-style: italic;
+            font-display: swap;
+        }
+        
+        @font-face {
+            font-family: 'Mint Grotesk';
+            src: url('fonts/MintGrotesk-Bold.woff2') format('woff2');
             font-weight: 700;
             font-style: normal;
             font-display: swap;
         }
         
         @font-face {
-            font-family: 'Beverly Drive Right TRIAL';
-            src: url('fonts/BeverlyDriveRightTRIAL-Extrabold.otf') format('opentype');
+            font-family: 'Mint Grotesk';
+            src: url('fonts/MintGrotesk-BoldItalic.woff2') format('woff2');
+            font-weight: 700;
+            font-style: italic;
+            font-display: swap;
+        }
+        
+        @font-face {
+            font-family: 'Mint Grotesk';
+            src: url('fonts/MintGrotesk-ExtraBold.woff2') format('woff2');
             font-weight: 800;
             font-style: normal;
             font-display: swap;
         }
         
         @font-face {
-            font-family: 'Beverly Drive Right TRIAL';
-            src: url('fonts/BeverlyDriveRightTRIAL-Black.otf') format('opentype');
+            font-family: 'Mint Grotesk';
+            src: url('fonts/MintGrotesk-ExtraBoldItalic.woff2') format('woff2');
+            font-weight: 800;
+            font-style: italic;
+            font-display: swap;
+        }
+        
+        @font-face {
+            font-family: 'Mint Grotesk';
+            src: url('fonts/MintGrotesk-Black.woff2') format('woff2');
             font-weight: 900;
             font-style: normal;
+            font-display: swap;
+        }
+        
+        @font-face {
+            font-family: 'Mint Grotesk';
+            src: url('fonts/MintGrotesk-BlackItalic.woff2') format('woff2');
+            font-weight: 900;
+            font-style: italic;
             font-display: swap;
         }
         
@@ -109,7 +186,7 @@
         }
 
         body {
-            font-family: 'Montserrat', sans-serif;
+            font-family: 'Mint Grotesk', sans-serif;
             background: var(--bg);
             color: var(--text);
             line-height: 1.7;
@@ -127,7 +204,6 @@
             z-index: 9999;
             transition: transform 0.15s ease-out;
             opacity: 0;
-            mix-blend-mode: difference;
             transform: translate(-50%, -50%);
         }
 
@@ -559,7 +635,7 @@
                 }
             });
 
-            // Custom cursor with color swap
+            // Custom cursor with delayed follow effect
             const cursorDot = document.querySelector('.cursor-dot');
             let currentHoveredElement = null;
             
@@ -567,6 +643,13 @@
                 console.error('Cursor dot element not found!');
                 return;
             }
+            
+            // Cursor position tracking with delay
+            let mouseX = 0;
+            let mouseY = 0;
+            let cursorX = 0;
+            let cursorY = 0;
+            const delay = 0.12; // Adjust this value to change delay (lower = more delay)
             
             // Interactive elements that trigger cursor scale
             const interactiveSelectors = [
@@ -576,8 +659,8 @@
             ];
             
             document.addEventListener('mousemove', (e) => {
-                cursorDot.style.left = e.clientX + 'px';
-                cursorDot.style.top = e.clientY + 'px';
+                mouseX = e.clientX;
+                mouseY = e.clientY;
                 cursorDot.classList.add('visible');
             
                 // Get element under cursor (excluding the cursor dot itself)
@@ -596,6 +679,18 @@
                     currentHoveredElement = null;
                 }
             });
+            
+            // Animate cursor with delay
+            function animateCursor() {
+                cursorX += (mouseX - cursorX) * delay;
+                cursorY += (mouseY - cursorY) * delay;
+                
+                cursorDot.style.left = cursorX + 'px';
+                cursorDot.style.top = cursorY + 'px';
+                
+                requestAnimationFrame(animateCursor);
+            }
+            animateCursor();
 
             document.addEventListener('click', () => {
                 cursorDot.classList.add('clicked');
