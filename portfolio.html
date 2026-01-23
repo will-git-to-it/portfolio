@@ -4,39 +4,116 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Will Brennan - Portfolio</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         @font-face {
-            font-family: 'Beverly Drive Right TRIAL';
-            src: url('fonts/BeverlyDriveRightTRIAL-Regular.otf') format('opentype');
+            font-family: 'Mint Grotesk';
+            src: url('fonts/MintGrotesk-Thin.woff2') format('woff2');
+            font-weight: 100;
+            font-style: normal;
+            font-display: swap;
+        }
+        
+        @font-face {
+            font-family: 'Mint Grotesk';
+            src: url('fonts/MintGrotesk-ThinItalic.woff2') format('woff2');
+            font-weight: 100;
+            font-style: italic;
+            font-display: swap;
+        }
+        
+        @font-face {
+            font-family: 'Mint Grotesk';
+            src: url('fonts/MintGrotesk-Light.woff2') format('woff2');
+            font-weight: 300;
+            font-style: normal;
+            font-display: swap;
+        }
+        
+        @font-face {
+            font-family: 'Mint Grotesk';
+            src: url('fonts/MintGrotesk-LightItalic.woff2') format('woff2');
+            font-weight: 300;
+            font-style: italic;
+            font-display: swap;
+        }
+        
+        @font-face {
+            font-family: 'Mint Grotesk';
+            src: url('fonts/MintGrotesk-Regular.woff2') format('woff2');
             font-weight: 400;
             font-style: normal;
             font-display: swap;
         }
         
         @font-face {
-            font-family: 'Beverly Drive Right TRIAL';
-            src: url('fonts/BeverlyDriveRightTRIAL-Bold.otf') format('opentype');
+            font-family: 'Mint Grotesk';
+            src: url('fonts/MintGrotesk-Italic.woff2') format('woff2');
+            font-weight: 400;
+            font-style: italic;
+            font-display: swap;
+        }
+        
+        @font-face {
+            font-family: 'Mint Grotesk';
+            src: url('fonts/MintGrotesk-Medium.woff2') format('woff2');
+            font-weight: 500;
+            font-style: normal;
+            font-display: swap;
+        }
+        
+        @font-face {
+            font-family: 'Mint Grotesk';
+            src: url('fonts/MintGrotesk-MediumItalic.woff2') format('woff2');
+            font-weight: 500;
+            font-style: italic;
+            font-display: swap;
+        }
+        
+        @font-face {
+            font-family: 'Mint Grotesk';
+            src: url('fonts/MintGrotesk-Bold.woff2') format('woff2');
             font-weight: 700;
             font-style: normal;
             font-display: swap;
         }
         
         @font-face {
-            font-family: 'Beverly Drive Right TRIAL';
-            src: url('fonts/BeverlyDriveRightTRIAL-Extrabold.otf') format('opentype');
+            font-family: 'Mint Grotesk';
+            src: url('fonts/MintGrotesk-BoldItalic.woff2') format('woff2');
+            font-weight: 700;
+            font-style: italic;
+            font-display: swap;
+        }
+        
+        @font-face {
+            font-family: 'Mint Grotesk';
+            src: url('fonts/MintGrotesk-ExtraBold.woff2') format('woff2');
             font-weight: 800;
             font-style: normal;
             font-display: swap;
         }
         
         @font-face {
-            font-family: 'Beverly Drive Right TRIAL';
-            src: url('fonts/BeverlyDriveRightTRIAL-Black.otf') format('opentype');
+            font-family: 'Mint Grotesk';
+            src: url('fonts/MintGrotesk-ExtraBoldItalic.woff2') format('woff2');
+            font-weight: 800;
+            font-style: italic;
+            font-display: swap;
+        }
+        
+        @font-face {
+            font-family: 'Mint Grotesk';
+            src: url('fonts/MintGrotesk-Black.woff2') format('woff2');
             font-weight: 900;
             font-style: normal;
+            font-display: swap;
+        }
+        
+        @font-face {
+            font-family: 'Mint Grotesk';
+            src: url('fonts/MintGrotesk-BlackItalic.woff2') format('woff2');
+            font-weight: 900;
+            font-style: italic;
             font-display: swap;
         }
         
@@ -106,30 +183,27 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            cursor: none !important;
         }
 
         body {
-            font-family: 'Montserrat', sans-serif;
+            font-family: 'Mint Grotesk', sans-serif;
             background: var(--bg);
             color: var(--text);
             line-height: 1.7;
             overflow-x: hidden;
             font-weight: 400;
-            cursor: none;
         }
 
         .cursor-dot {
             width: 20px;
             height: 20px;
-            background: #FFFDD0;
+            background: #EDEDE1;
             border-radius: 50%;
             position: fixed;
             pointer-events: none;
             z-index: 10000;
             transition: transform 0.15s ease-out;
             opacity: 0;
-            mix-blend-mode: difference;
             transform: translate(-50%, -50%);
         }
 
@@ -401,8 +475,7 @@
             max-width: 900px;
             width: 100%;
             margin: 0 auto;
-            opacity: 0;
-            animation: fadeInUp 1s ease-out 0.3s forwards;
+            transform: translateY(5vh);
         }
 
         @keyframes fadeInUp {
@@ -423,7 +496,9 @@
             line-height: 1.2;
             letter-spacing: -0.02em;
             color: var(--text);
-            margin-bottom: 2rem;
+            margin-bottom: 1rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.3s forwards;
         }
         
         .hero h1 {
@@ -435,6 +510,23 @@
             letter-spacing: -0.02em;
             color: var(--text-light);
             max-width: 100%;
+        }
+
+        .hero h1 .word,
+        .word-fade .word {
+            display: inline-block;
+            opacity: 0;
+            animation: fadeInWord 1.2s ease-in-out forwards;
+        }
+
+        @keyframes fadeInWord {
+            to {
+                opacity: 1;
+            }
+        }
+
+        .word-fade {
+            opacity: 1;
         }
 
         .hero p {
@@ -472,14 +564,38 @@
             grid-template-columns: 1.2fr 1fr;
             gap: 4rem;
             align-items: center;
-            opacity: 0;
-            transform: translateY(60px);
-            transition: all 0.8s ease-out;
         }
 
-        .project-card.visible {
+        /* Fade-in on scroll animations */
+        .fade-in-scroll {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .fade-in-scroll.visible {
             opacity: 1;
             transform: translateY(0);
+        }
+
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .fade-in-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Add staggered delay for child elements */
+        .project-card .project-info.fade-in-up {
+            transition-delay: 0.15s;
+        }
+
+        .project-card .project-image.fade-in-up {
+            transition-delay: 0.05s;
         }
 
         .project-card:nth-child(even) {
@@ -497,13 +613,17 @@
             border-radius: 4px;
             overflow: hidden;
             cursor: pointer;
-            transition: transform 0.3s ease;
+            transition: none;
             transform-style: preserve-3d;
             perspective: 1000px;
         }
 
         .project-image:hover {
             transform: scale(1.02);
+        }
+        
+        .project-image.mouse-out {
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         .project-image::after {
@@ -797,13 +917,13 @@
     </section>
 
     <section class="projects" id="work">
-        <h2 class="section-title">Selected Work</h2>
+        <h2 class="section-title word-fade">Selected Work</h2>
         <div class="project-grid">
             <article class="project-card">
-                <div class="project-image"></div>
-                <div class="project-info">
-                    <h3>Project One</h3>
-                    <p>A comprehensive brand identity and digital platform for a sustainable fashion startup. The design emphasizes minimalism and eco-consciousness through natural colors and clean typography.</p>
+                <div class="project-image fade-in-up"></div>
+                <div class="project-info fade-in-up">
+                    <h3 class="word-fade">Project One</h3>
+                    <p class="word-fade">A comprehensive brand identity and digital platform for a sustainable fashion startup. The design emphasizes minimalism and eco-consciousness through natural colors and clean typography.</p>
                     <div class="project-tags">
                         <span class="tag">BRANDING</span>
                         <span class="tag">WEB DESIGN</span>
@@ -813,10 +933,10 @@
             </article>
 
             <article class="project-card">
-                <div class="project-image"></div>
-                <div class="project-info">
-                    <h3>Project Two</h3>
-                    <p>An interactive portfolio platform for a contemporary art gallery, featuring fluid animations and an elegant content management system for showcasing exhibitions.</p>
+                <div class="project-image fade-in-up"></div>
+                <div class="project-info fade-in-up">
+                    <h3 class="word-fade">Project Two</h3>
+                    <p class="word-fade">An interactive portfolio platform for a contemporary art gallery, featuring fluid animations and an elegant content management system for showcasing exhibitions.</p>
                     <div class="project-tags">
                         <span class="tag">UI/UX</span>
                         <span class="tag">REACT</span>
@@ -826,10 +946,10 @@
             </article>
 
             <article class="project-card">
-                <div class="project-image"></div>
-                <div class="project-info">
-                    <h3>Project Three</h3>
-                    <p>A mobile-first e-commerce experience for artisanal goods, built with performance and accessibility at its core. Features include advanced filtering and seamless checkout.</p>
+                <div class="project-image fade-in-up"></div>
+                <div class="project-info fade-in-up">
+                    <h3 class="word-fade">Project Three</h3>
+                    <p class="word-fade">A mobile-first e-commerce experience for artisanal goods, built with performance and accessibility at its core. Features include advanced filtering and seamless checkout.</p>
                     <div class="project-tags">
                         <span class="tag">E-COMMERCE</span>
                         <span class="tag">MOBILE</span>
@@ -841,9 +961,9 @@
     </section>
 
     <section class="contact" id="contact">
-        <h2>Let's work together</h2>
-        <p>Have a project in mind? I'd love to hear about it.</p>
-        <div class="contact-links">
+        <h2 class="word-fade">Let's work together</h2>
+        <p class="word-fade">Have a project in mind? I'd love to hear about it.</p>
+        <div class="contact-links fade-in-scroll" data-delay="300">
             <a href="/cdn-cgi/l/email-protection#a6dfc9d3d488c3cbc7cfcae6c3dec7cbd6cac388c5c9cb" class="contact-link">EMAIL</a>
             <a href="https://linkedin.com" target="_blank" class="contact-link">LINKEDIN</a>
             <a href="https://github.com" target="_blank" class="contact-link">GITHUB</a>
@@ -851,11 +971,35 @@
     </section>
 
     <footer>
-        <p>&copy; 2026 Will Brennan. All rights reserved.</p>
+        <p class="word-fade">&copy; 2026 Will Brennan. All rights reserved.</p>
     </footer>
 
     <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Function to split text into words with animation delays
+            function splitTextIntoWords(element, baseDelay = 0) {
+                const text = element.innerHTML;
+                // Split by spaces but preserve HTML tags
+                const parts = text.split(/(<[^>]*>.*?<\/[^>]*>|\s+)/);
+                const words = parts.filter(part => part.trim() !== '');
+                
+                element.innerHTML = words.map((word, index) => {
+                    if (word.startsWith('<')) {
+                        // Handle HTML tags - wrap the entire tag
+                        return `<span class="word" style="animation-delay: ${baseDelay + index * 0.06}s">${word}</span>`;
+                    } else if (word.trim()) {
+                        // Regular word
+                        return `<span class="word" style="animation-delay: ${baseDelay + index * 0.06}s">${word}</span>`;
+                    }
+                    return '';
+                }).join(' ');
+            }
+
+            // Word-by-word animation for hero h1
+            const heroHeading = document.querySelector('.hero h1');
+            if (heroHeading) {
+                splitTextIntoWords(heroHeading, 0.5);
+            }
             // Menu overlay functionality
             const menuButton = document.querySelector('.menu-button');
             const menuOverlay = document.querySelector('.menu-overlay');
@@ -894,7 +1038,7 @@
                 }
             });
 
-            // Custom cursor with color swap
+            // Custom cursor with delayed follow effect
             const cursorDot = document.querySelector('.cursor-dot');
             console.log('Cursor dot element:', cursorDot);
             let currentHoveredElement = null;
@@ -903,6 +1047,13 @@
                 console.error('Cursor dot element not found!');
                 return;
             }
+            
+            // Cursor position tracking with delay
+            let mouseX = 0;
+            let mouseY = 0;
+            let cursorX = 0;
+            let cursorY = 0;
+            const delay = 0.12; // Adjust this value to change delay (lower = more delay)
             
             // Interactive elements that trigger cursor scale
             const interactiveSelectors = [
@@ -914,8 +1065,8 @@
             ];
             
             document.addEventListener('mousemove', (e) => {
-                cursorDot.style.left = e.clientX + 'px';
-                cursorDot.style.top = e.clientY + 'px';
+                mouseX = e.clientX;
+                mouseY = e.clientY;
                 cursorDot.classList.add('visible');
             
                 // Get element under cursor (excluding the cursor dot itself)
@@ -934,6 +1085,18 @@
                     currentHoveredElement = null;
                 }
             });
+            
+            // Animate cursor with delay
+            function animateCursor() {
+                cursorX += (mouseX - cursorX) * delay;
+                cursorY += (mouseY - cursorY) * delay;
+                
+                cursorDot.style.left = cursorX + 'px';
+                cursorDot.style.top = cursorY + 'px';
+                
+                requestAnimationFrame(animateCursor);
+            }
+            animateCursor();
 
             document.addEventListener('click', () => {
                 cursorDot.classList.add('clicked');
@@ -947,30 +1110,58 @@
                 currentHoveredElement = null;
             });
 
-        // Scroll animations for project cards
+        // Scroll animations for all fade-in elements
         const observerOptions = {
-            threshold: 0.2,
-            rootMargin: '0px 0px -100px 0px'
+            threshold: 0.15,
+            rootMargin: '0px 0px -80px 0px'
         };
 
         const observer = new IntersectionObserver((entries) => {
-            entries.forEach((entry, index) => {
+            entries.forEach((entry) => {
                 if (entry.isIntersecting) {
+                    // Add a slight delay for staggered effect
+                    const delay = entry.target.dataset.delay || 0;
                     setTimeout(() => {
                         entry.target.classList.add('visible');
-                    }, index * 200);
+                        
+                        // If this is a project card, also trigger child animations
+                        if (entry.target.classList.contains('project-card')) {
+                            const children = entry.target.querySelectorAll('.fade-in-up, .fade-in-scroll, .word-fade');
+                            children.forEach(child => {
+                                child.classList.add('visible');
+                                // Split text into words for word-fade elements
+                                if (child.classList.contains('word-fade') && !child.querySelector('.word')) {
+                                    splitTextIntoWords(child, 0);
+                                }
+                            });
+                        }
+                        
+                        // Handle word-fade elements
+                        if (entry.target.classList.contains('word-fade') && !entry.target.querySelector('.word')) {
+                            splitTextIntoWords(entry.target, 0);
+                        }
+                    }, delay);
+                    // Unobserve after animation to improve performance
+                    observer.unobserve(entry.target);
                 }
             });
         }, observerOptions);
 
-        document.querySelectorAll('.project-card').forEach(card => {
-            observer.observe(card);
+        // Observe all top-level fade-in elements and word-fade elements
+        const topLevelFadeElements = document.querySelectorAll('.section-title, .contact .word-fade, footer .word-fade, .project-card');
+        topLevelFadeElements.forEach((element, index) => {
+            observer.observe(element);
         });
 
         // Mouse-responsive rotation for project images
         const projectImages = document.querySelectorAll('.project-image');
         
         projectImages.forEach(image => {
+            image.addEventListener('mouseenter', () => {
+                // Remove transition class when mouse enters for instant response
+                image.classList.remove('mouse-out');
+            });
+            
             image.addEventListener('mousemove', (e) => {
                 const rect = image.getBoundingClientRect();
                 const centerX = rect.left + rect.width / 2;
@@ -984,11 +1175,13 @@
                 const rotateY = mouseX * 12;
                 const rotateX = -mouseY * 12;
                 
-                // Apply transform with scale
+                // Apply transform with scale (no transition during movement)
                 image.style.transform = `scale(1.02) perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
             });
             
             image.addEventListener('mouseleave', () => {
+                // Add transition class for smooth reset
+                image.classList.add('mouse-out');
                 // Reset rotation smoothly
                 image.style.transform = 'scale(1) perspective(1000px) rotateX(0deg) rotateY(0deg)';
             });
