@@ -241,14 +241,14 @@
         .project-info h3,
         .project-info p,
         .project-tags {
-            transition: filter 0.3s ease-out, opacity 0.3s ease-out;
-            will-change: filter, opacity;
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform;
         }
         
         /* Separate handling for images to avoid flickering */
         .project-image {
-            transition: filter 0.25s ease-out, opacity 0.25s ease-out;
-            will-change: filter, opacity, transform;
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform;
         }
 
         @keyframes slideDown {
@@ -479,13 +479,13 @@
             align-items: center;
             justify-content: center;
             padding: 0 2rem;
+            max-width: 900px;
+            margin: 0 auto;
             position: relative;
         }
 
         .hero-content {
-            max-width: 900px;
             width: 100%;
-            margin: 0 auto;
             transform: translateY(5vh);
         }
 
@@ -691,53 +691,6 @@
             letter-spacing: 0.05em;
         }
 
-        /* Contact Section */
-        .contact {
-            padding: 8rem 2rem;
-            background: linear-gradient(180deg, var(--bg) 0%, #0f2623 100%);
-            text-align: center;
-        }
-
-        .contact h2 {
-            font-family: 'Tartuffo', serif;
-            font-size: clamp(2.5rem, 6vw, 4.5rem);
-            font-weight: 300;
-            margin-bottom: 2rem;
-            letter-spacing: -0.02em;
-        }
-
-        .contact p {
-            font-size: clamp(1rem, 2vw, 1.25rem);
-            color: var(--text-light);
-            margin-bottom: 3rem;
-        }
-
-        .contact-links {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .contact-link {
-            padding: 1rem 2.5rem;
-            border: 2px solid var(--text-light);
-            color: var(--text);
-            text-decoration: none;
-            font-size: 0.95rem;
-            font-weight: 500;
-            letter-spacing: 0.05em;
-            transition: all 0.3s;
-            border-radius: 50px;
-        }
-
-        .contact-link:hover {
-            background: transparent;
-            border-color: var(--accent);
-            color: var(--text);
-            transform: translateY(-2px);
-        }
-
         /* Footer */
         footer {
             padding: 3rem 2rem;
@@ -810,14 +763,6 @@
                 gap: 2rem;
             }
 
-            .contact {
-                padding: 4rem 1.5rem;
-            }
-
-            .contact-links {
-                gap: 1rem;
-            }
-
             footer {
                 padding: 2rem 1.5rem;
             }
@@ -878,15 +823,6 @@
                 font-size: 0.75rem;
             }
 
-            .contact {
-                padding: 3rem 1rem;
-            }
-
-            .contact-link {
-                padding: 0.875rem 2rem;
-                font-size: 0.85rem;
-            }
-
             footer {
                 padding: 2rem 1rem;
                 font-size: 0.85rem;
@@ -913,7 +849,6 @@
                 <li><a href="index.html">Home</a></li>
                 <li><a href="#work">Work</a></li>
                 <li><a href="about.html">About</a></li>
-                <li><a href="#contact">Contact</a></li>
             </ul>
             <div class="menu-social">
                 <a href="https://linkedin.com" target="_blank">LINKEDIN</a>
@@ -971,16 +906,6 @@
                     </div>
                 </div>
             </article>
-        </div>
-    </section>
-
-    <section class="contact" id="contact">
-        <h2 class="word-fade">Let's work together</h2>
-        <p class="word-fade">Have a project in mind? I'd love to hear about it.</p>
-        <div class="contact-links fade-in-scroll" data-delay="300">
-            <a href="/cdn-cgi/l/email-protection#a6dfc9d3d488c3cbc7cfcae6c3dec7cbd6cac388c5c9cb" class="contact-link">EMAIL</a>
-            <a href="https://linkedin.com" target="_blank" class="contact-link">LINKEDIN</a>
-            <a href="https://github.com" target="_blank" class="contact-link">GITHUB</a>
         </div>
     </section>
 
@@ -1214,121 +1139,71 @@
             });
         });
 
-        // Blur and fade effect - granular element tracking confined to top of viewport
+        // Fade out effect - elements fully fade before reaching top nav
         const header = document.querySelector('header');
         const headerHeight = header.offsetHeight;
-        const effectZone = 250; // Only apply effect to elements in top 250px of viewport
         
-        // Separate images from other elements for different handling
         const textElements = document.querySelectorAll('.hero-content, .section-title, .project-info h3, .project-info p, .project-tags');
         const imageElements = document.querySelectorAll('.project-image');
         
-        // Track previous blur states to prevent unnecessary updates
-        const previousStates = new WeakMap();
-        
-        function applyScrollBlur() {
-            // Handle text elements with full blur logic
+        function applyScrollFade() {
+            // Text elements fade out completely before reaching header
+            const textFadeZone = 150; // Shorter fade distance
+            const textFadeStart = headerHeight + 150; // Smaller area before header
+            
             textElements.forEach(element => {
                 const rect = element.getBoundingClientRect();
                 const elementTop = rect.top;
-                const elementBottom = rect.bottom;
-                const elementHeight = rect.height;
                 
-                // ONLY apply effect if element is in the top portion of viewport
-                if (elementTop < effectZone && elementBottom > 0) {
-                    let blurIntensity = 0;
-                    let opacityValue = 1;
+                // Fade completes exactly at headerHeight
+                if (elementTop < textFadeStart) {
+                    const distanceFromStart = textFadeStart - elementTop;
+                    const fadeProgress = Math.min(distanceFromStart / textFadeZone, 1);
                     
-                    const elementCenter = elementTop + (elementHeight / 2);
+                    const opacityValue = Math.max(0, 1 - fadeProgress);
                     
-                    if (elementCenter < headerHeight) {
-                        const distanceUnderHeader = headerHeight - elementCenter;
-                        const maxBlur = 8;
-                        const blurProgress = Math.min(distanceUnderHeader / 100, 1);
-                        
-                        blurIntensity = maxBlur * blurProgress;
-                        opacityValue = Math.max(0.3, 1 - (blurProgress * 0.6));
-                    } else if (elementTop < headerHeight && elementCenter >= headerHeight) {
-                        const overlap = headerHeight - elementTop;
-                        const overlapProgress = Math.min(overlap / elementHeight, 1);
-                        
-                        blurIntensity = 6 * overlapProgress;
-                        opacityValue = Math.max(0.4, 1 - (overlapProgress * 0.5));
-                    } else if (elementTop < effectZone) {
-                        const distanceFromHeader = elementTop - headerHeight;
-                        const zoneHeight = effectZone - headerHeight;
-                        const approachProgress = 1 - (distanceFromHeader / zoneHeight);
-                        
-                        if (approachProgress > 0.75) {
-                            const intensity = (approachProgress - 0.75) / 0.25;
-                            blurIntensity = 2 * intensity;
-                            opacityValue = 1 - (intensity * 0.08);
-                        }
-                    }
-                    
-                    if (blurIntensity > 0.1) {
-                        element.style.filter = `blur(${blurIntensity}px)`;
-                        element.style.opacity = opacityValue;
-                    } else {
-                        element.style.filter = 'none';
-                        element.style.opacity = '1';
-                    }
+                    element.style.opacity = opacityValue;
+                    element.style.transform = 'translateY(0)';
                 } else {
-                    element.style.filter = 'none';
                     element.style.opacity = '1';
+                    element.style.transform = 'translateY(0)';
                 }
             });
             
-            // Handle images with stricter thresholds to prevent flicker
+            // Images fade over a shorter distance, staying visible longer
+            const imageFadeZone = 200; // Shorter fade zone
+            const imageFadeStart = headerHeight + 200; // Start closer to header
+            
             imageElements.forEach(element => {
                 const rect = element.getBoundingClientRect();
                 const elementTop = rect.top;
-                const elementBottom = rect.bottom;
                 
-                if (elementTop < effectZone && elementBottom > 0) {
-                    let blurIntensity = 0;
-                    let opacityValue = 1;
+                if (elementTop < imageFadeStart) {
+                    const distanceFromStart = imageFadeStart - elementTop;
+                    const fadeProgress = Math.min(distanceFromStart / imageFadeZone, 1);
                     
-                    // Only blur images when clearly under the header
-                    if (elementTop < headerHeight - 20) {
-                        const distanceUnderHeader = headerHeight - elementTop;
-                        const blurProgress = Math.min(distanceUnderHeader / 120, 1);
-                        
-                        blurIntensity = Math.round(8 * blurProgress * 10) / 10; // Round to reduce updates
-                        opacityValue = Math.max(0.35, 1 - (blurProgress * 0.55));
-                    }
+                    const opacityValue = Math.max(0, 1 - fadeProgress);
                     
-                    // Only update if the change is significant (reduce flickering)
-                    const prevState = previousStates.get(element) || { blur: 0, opacity: 1 };
-                    if (Math.abs(prevState.blur - blurIntensity) > 0.3 || Math.abs(prevState.opacity - opacityValue) > 0.05) {
-                        if (blurIntensity > 0.3) {
-                            element.style.filter = `blur(${blurIntensity}px)`;
-                            element.style.opacity = opacityValue;
-                        } else {
-                            element.style.filter = 'none';
-                            element.style.opacity = '1';
-                        }
-                        previousStates.set(element, { blur: blurIntensity, opacity: opacityValue });
-                    }
+                    element.style.opacity = opacityValue;
+                    element.style.transform = 'translateY(0)';
                 } else {
-                    element.style.filter = 'none';
                     element.style.opacity = '1';
-                    previousStates.set(element, { blur: 0, opacity: 1 });
+                    element.style.transform = 'translateY(0)';
                 }
             });
         }
         
-        // Apply blur effect on scroll
+        // Apply fade effect on scroll
         let scrollTimeout;
         window.addEventListener('scroll', () => {
             if (scrollTimeout) {
                 window.cancelAnimationFrame(scrollTimeout);
             }
-            scrollTimeout = window.requestAnimationFrame(applyScrollBlur);
+            scrollTimeout = window.requestAnimationFrame(applyScrollFade);
         }, { passive: true });
         
         // Initial call to set up the effect
-        applyScrollBlur();
+        applyScrollFade();
 
     });
     </script>
