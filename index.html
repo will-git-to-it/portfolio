@@ -630,6 +630,8 @@
             transform: translateZ(0);
             backface-visibility: hidden;
             -webkit-backface-visibility: hidden;
+            display: block;
+            text-decoration: none;
         }
 
         .project-image:hover {
@@ -663,8 +665,8 @@
 
         .project-info h3 {
             font-family: 'Tartuffo', serif;
-            font-size: clamp(1.75rem, 4vw, 2.75rem);
-            font-weight: 500;
+            font-size: clamp(2.25rem, 4vw, 3.25rem);
+            font-weight: 300;
             margin-bottom: 1rem;
             letter-spacing: -0.02em;
         }
@@ -869,7 +871,7 @@
         <h2 class="section-title word-fade">Selected Work</h2>
         <div class="project-grid">
             <article class="project-card">
-                <div class="project-image fade-in-up"></div>
+                <a href="case-study.html" class="project-image fade-in-up"></a>
                 <div class="project-info fade-in-up">
                     <h3 class="word-fade">Project One</h3>
                     <p class="word-fade">A comprehensive brand identity and digital platform for a sustainable fashion startup. The design emphasizes minimalism and eco-consciousness through natural colors and clean typography.</p>

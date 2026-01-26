@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Name - Will Brennan</title>
+    <style>
+        @font-face {
+            font-family: 'Mint Grotesk';
+            src: url('fonts/MintGrotesk-Thin.woff2') format('woff2');
+            font-weight: 100;
+            font-style: normal;
+            font-display: swap;
+        }
+        
+        @font-face {
+            font-family: 'Mint Grotesk';
+            src: url('fonts/MintGrotesk-Light.woff2') format('woff2');
+            font-weight: 300;
+            font-style: normal;
+            font-display: swap;
+        }
+        
+        @font-face {
+            font-family: 'Mint Grotesk';
+            src: url('fonts/MintGrotesk-Regular.woff2') format('woff2');
+            font-weight: 400;
+            font-style: normal;
+            font-display: swap;
+        }
+        
+        @font-face {
+            font-family: 'Mint Grotesk';
+            src: url('fonts/MintGrotesk-Medium.woff2') format('woff2');
+            font-weight: 500;
+            font-style: normal;
+            font-display: swap;
+        }
+        
+        @font-face {
+            font-family: 'Mint Grotesk';
+            src: url('fonts/MintGrotesk-Bold.woff2') format('woff2');
+            font-weight: 700;
+            font-style: normal;
+            font-display: swap;
+        }
+        
+        @font-face {
+            font-family: 'Tartuffo';
+            src: url('fonts/Tartuffo-Regular.woff2') format('woff2'),
+                 url('fonts/Tartuffo-Regular.woff') format('woff');
+            font-weight: 400;
+            font-style: normal;
+            font-display: swap;
+        }
+        
+        @font-face {
+            font-family: 'Tartuffo';
+            src: url('fonts/Tartuffo-Light.woff2') format('woff2'),
+                 url('fonts/Tartuffo-Light.woff') format('woff');
+            font-weight: 300;
+            font-style: normal;
+            font-display: swap;
+        }
+        
+        @font-face {
+            font-family: 'Tartuffo';
+            src: url('fonts/Tartuffo-Medium.woff2') format('woff2'),
+                 url('fonts/Tartuffo-Medium.woff') format('woff');
+            font-weight: 500;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        :root {
+            --bg: #002F21;
+            --text: #FFFFFF;
+            --text-light: #EDEDE1;
+            --accent: #7cc9a8;
+            --border: #2d5550;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Mint Grotesk', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            overflow-x: hidden;
+            font-weight: 400;
+        }
+
+        .cursor-dot {
+            width: 20px;
+            height: 20px;
+            background: #EDEDE1;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 10000;
+            transition: transform 0.15s ease-out;
+            opacity: 0;
+            transform: translate(-50%, -50%);
+        }
+
+        .cursor-dot.visible {
+            opacity: 1;
+        }
+
+        .cursor-dot.clicked {
+            transform: translate(-50%, -50%) scale(2);
+        }
+        
+        .cursor-dot.hovering {
+            transform: translate(-50%, -50%) scale(1.5);
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 2rem 2.85rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: linear-gradient(180deg, rgba(0, 47, 33, 0.95) 0%, transparent 100%);
+            animation: slideDown 0.8s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .logo {
+            display: block;
+            width: 35px;
+            height: 26px;
+        }
+        
+        .logo img {
+            width: 100%;
+            height: 100%;
+        }
+
+        nav {
+            display: flex;
+            gap: 2.5rem;
+        }
+
+        .menu-button {
+            font-family: 'Tartuffo', serif;
+            font-weight: 300;
+            font-size: 20px;
+            letter-spacing: -0.02em;
+            color: var(--text);
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            transition: opacity 0.3s;
+        }
+
+        .menu-button:hover {
+            opacity: 0.7;
+        }
+
+        /* Menu Overlay */
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 47, 33, 0.7);
+            backdrop-filter: blur(20px) brightness(0.95);
+            -webkit-backdrop-filter: blur(20px) brightness(0.95);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .menu-overlay::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='2.5' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.15'/%3E%3C/svg%3E");
+            opacity: 0.3;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .menu-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .menu-content {
+            text-align: center;
+            transform: translateY(30px);
+            transition: transform 0.5s ease;
+        }
+
+        .menu-overlay.active .menu-content {
+            transform: translateY(0);
+        }
+
+        .menu-close {
+            position: absolute;
+            top: 2rem;
+            right: 2.85rem;
+            background: none;
+            border: none;
+            color: var(--text);
+            font-family: 'Tartuffo', serif;
+            font-size: 20px;
+            font-weight: 300;
+            cursor: pointer;
+            padding: 0.5rem;
+            transition: opacity 0.3s;
+            letter-spacing: -0.02em;
+        }
+
+        .menu-close:hover {
+            opacity: 0.7;
+        }
+
+        .menu-links {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .menu-links li {
+            margin: 0;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .menu-overlay.active .menu-links li {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .menu-overlay.active .menu-links li:nth-child(1) { transition-delay: 0.1s; }
+        .menu-overlay.active .menu-links li:nth-child(2) { transition-delay: 0.2s; }
+        .menu-overlay.active .menu-links li:nth-child(3) { transition-delay: 0.3s; }
+
+        .menu-links a {
+            font-family: 'Tartuffo', serif;
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 300;
+            color: var(--text);
+            text-decoration: none;
+            display: block;
+            padding: 1rem;
+            letter-spacing: -0.02em;
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        .menu-links a:hover {
+            color: var(--accent);
+            transform: translateX(10px);
+        }
+
+        .menu-social {
+            margin-top: 3rem;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .menu-overlay.active .menu-social {
+            opacity: 1;
+            transform: translateY(0);
+            transition-delay: 0.4s;
+        }
+
+        .menu-social a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 0.9rem;
+            letter-spacing: 0.1em;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        .menu-social a:hover {
+            color: var(--accent);
+        }
+
+        /* Fade-in animations */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .fade-in-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Case Study Hero */
+        .case-study-hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .project-category {
+            font-size: 0.9rem;
+            letter-spacing: 0.15em;
+            color: var(--accent);
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.2s forwards;
+        }
+
+        .project-title {
+            font-family: 'Tartuffo', serif;
+            font-size: clamp(3rem, 7vw, 5rem);
+            font-weight: 300;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.4s forwards;
+        }
+
+        .project-subtitle {
+            font-size: clamp(1.1rem, 2vw, 1.35rem);
+            color: var(--text-light);
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            line-height: 1.6;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.6s forwards;
+        }
+
+        .project-meta {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            flex-wrap: wrap;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.8s forwards;
+        }
+
+        .meta-item {
+            text-align: center;
+        }
+
+        .meta-label {
+            font-size: 0.85rem;
+            letter-spacing: 0.1em;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .meta-value {
+            font-size: 1rem;
+            color: var(--text-light);
+        }
+
+        /* Content Section */
+        .content-section {
+            padding: 6rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .content-section.narrow {
+            max-width: 900px;
+        }
+
+        .section-label {
+            font-size: 0.85rem;
+            letter-spacing: 0.15em;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+        }
+
+        .section-title {
+            font-family: 'Tartuffo', serif;
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 300;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+            margin-bottom: 2rem;
+        }
+
+        .section-text {
+            font-size: clamp(1rem, 2vw, 1.15rem);
+            color: var(--text-light);
+            line-height: 1.75;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-text strong {
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        /* Image Containers */
+        .image-full {
+            width: 100%;
+            margin: 4rem 0;
+            overflow: hidden;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #2d5550 0%, #1f4440 100%);
+        }
+
+        .image-full img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+
+        .image-grid img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #2d5550 0%, #1f4440 100%);
+        }
+
+        .image-trio {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin: 4rem 0;
+        }
+
+        .image-trio img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #2d5550 0%, #1f4440 100%);
+        }
+
+        .image-caption {
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-top: 1rem;
+            font-style: italic;
+        }
+
+        /* Video Container */
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            margin: 4rem 0;
+            border-radius: 8px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #2d5550 0%, #1f4440 100%);
+        }
+
+        .video-container video,
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Key Features */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 3rem;
+            margin: 4rem 0;
+        }
+
+        .feature-item {
+            text-align: left;
+        }
+
+        .feature-number {
+            font-family: 'Tartuffo', serif;
+            font-size: 3rem;
+            font-weight: 300;
+            color: var(--accent);
+            opacity: 0.3;
+            line-height: 1;
+            margin-bottom: 1rem;
+        }
+
+        .feature-title {
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+
+        .feature-description {
+            font-size: 1rem;
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        /* Quote Section */
+        .quote-section {
+            padding: 8rem 2rem;
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .quote-text {
+            font-family: 'Tartuffo', serif;
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            font-weight: 300;
+            line-height: 1.4;
+            letter-spacing: -0.02em;
+            margin-bottom: 2rem;
+        }
+
+        .quote-author {
+            font-size: 1rem;
+            color: var(--accent);
+            letter-spacing: 0.05em;
+        }
+
+        /* Results Section */
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin: 4rem 0;
+        }
+
+        .result-item {
+            text-align: center;
+            padding: 2rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+
+        .result-value {
+            font-family: 'Tartuffo', serif;
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            font-weight: 300;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            line-height: 1;
+        }
+
+        .result-label {
+            font-size: 1rem;
+            color: var(--text-light);
+        }
+
+        /* Navigation */
+        .project-navigation {
+            padding: 6rem 2rem 4rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            border-top: 1px solid var(--border);
+        }
+
+        .nav-label {
+            font-size: 0.85rem;
+            letter-spacing: 0.15em;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .next-project {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 2rem 0;
+            text-decoration: none;
+            color: var(--text);
+            transition: transform 0.3s ease;
+        }
+
+        .next-project:hover {
+            transform: translateX(10px);
+        }
+
+        .next-project-title {
+            font-family: 'Tartuffo', serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 300;
+            letter-spacing: -0.02em;
+        }
+
+        .next-arrow {
+            font-size: 2rem;
+            color: var(--accent);
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 2rem;
+            text-align: center;
+            border-top: 1px solid var(--border);
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        /* Scroll fade effect */
+        .scroll-fade {
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .image-trio {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 1.5rem 1.5rem;
+            }
+
+            .case-study-hero {
+                padding: 7rem 1.5rem 3rem;
+            }
+
+            .project-meta {
+                gap: 2rem;
+            }
+
+            .content-section {
+                padding: 4rem 1.5rem;
+            }
+
+            .image-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .quote-section {
+                padding: 5rem 1.5rem;
+            }
+
+            .project-navigation {
+                padding: 4rem 1.5rem 3rem;
+            }
+
+            footer {
+                padding: 2rem 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header {
+                padding: 1rem 1rem;
+            }
+
+            .logo {
+                width: 30px;
+                height: 22px;
+            }
+
+            .menu-button {
+                font-size: 16px;
+            }
+
+            .case-study-hero {
+                padding: 6rem 1rem 2rem;
+            }
+
+            .content-section {
+                padding: 3rem 1rem;
+            }
+
+            .image-full,
+            .video-container {
+                margin: 3rem 0;
+            }
+
+            .quote-section {
+                padding: 4rem 1rem;
+            }
+
+            .project-navigation {
+                padding: 3rem 1rem 2rem;
+            }
+
+            footer {
+                padding: 2rem 1rem;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="cursor-dot"></div>
+
+    <header>
+        <a href="index.html" class="logo">
+            <img src="logo.svg" alt="Logo">
+        </a>
+        <nav>
+            <button class="menu-button" aria-label="Open menu">Menu</button>
+        </nav>
+    </header>
+
+    <div class="menu-overlay">
+        <button class="menu-close" aria-label="Close menu">Close</button>
+        <div class="menu-content">
+            <ul class="menu-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#work">Work</a></li>
+                <li><a href="about.html">About</a></li>
+            </ul>
+            <div class="menu-social">
+                <a href="https://linkedin.com" target="_blank">LINKEDIN</a>
+                <a href="https://github.com" target="_blank">GITHUB</a>
+                <a href="mailto:hello@example.com">EMAIL</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="case-study-hero">
+        <div class="hero-content">
+            <div class="project-category">PRODUCT DESIGN</div>
+            <h1 class="project-title">Project Name</h1>
+            <p class="project-subtitle">A comprehensive design solution that transforms how users interact with digital products through intuitive interfaces and thoughtful interactions.</p>
+            <div class="project-meta">
+                <div class="meta-item">
+                    <div class="meta-label">ROLE</div>
+                    <div class="meta-value">Product Designer</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-label">TIMELINE</div>
+                    <div class="meta-value">3 Months</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-label">TOOLS</div>
+                    <div class="meta-value">Figma, Principle</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Overview Section -->
+    <section class="content-section narrow fade-in-up">
+        <div class="section-label">OVERVIEW</div>
+        <h2 class="section-title">Reimagining the digital experience</h2>
+        <p class="section-text">This project began with a simple question: how can we make digital interactions feel more natural and intuitive? Through extensive research and user testing, we developed a design system that prioritizes accessibility and user empowerment.</p>
+        <p class="section-text">The challenge was to create a solution that would serve both novice and expert users while maintaining visual consistency and brand identity across multiple touchpoints.</p>
+    </section>
+
+    <!-- Full Width Image -->
+    <section class="content-section fade-in-up">
+        <div class="image-full">
+            <!-- Replace with actual image -->
+            <div style="aspect-ratio: 16/9; background: linear-gradient(135deg, #2d5550 0%, #1f4440 100%); display: flex; align-items: center; justify-content: center; color: var(--text-light); font-size: 1rem;">Hero Image Placeholder</div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="content-section narrow fade-in-up">
+        <div class="section-label">THE CHALLENGE</div>
+        <h2 class="section-title">Understanding user needs and pain points</h2>
+        <p class="section-text">Our research revealed that users were struggling with overly complex interfaces that required extensive training. The existing system lacked clear visual hierarchy and failed to guide users through critical workflows.</p>
+        <p class="section-text"><strong>Key findings:</strong> 67% of users abandoned tasks due to confusion, average completion time was 3x longer than industry standards, and support tickets increased by 45% quarter over quarter.</p>
+    </section>
+
+    <!-- Image Grid -->
+    <section class="content-section fade-in-up">
+        <div class="image-grid">
+            <div>
+                <div style="aspect-ratio: 4/3; background: linear-gradient(135deg, #2d5550 0%, #1f4440 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--text-light);">Research Image 1</div>
+            </div>
+            <div>
+                <div style="aspect-ratio: 4/3; background: linear-gradient(135deg, #2d5550 0%, #1f4440 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--text-light);">Research Image 2</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="content-section narrow fade-in-up">
+        <div class="section-label">THE SOLUTION</div>
+        <h2 class="section-title">A design system built for clarity</h2>
+        <p class="section-text">We developed a comprehensive design system centered around progressive disclosure, clear visual hierarchy, and contextual help. Every component was crafted to reduce cognitive load while maintaining aesthetic appeal.</p>
+        <p class="section-text">The new interface introduces intelligent defaults, streamlined workflows, and adaptive UI elements that respond to user behavior and preferences.</p>
+    </section>
+
+    <!-- Video Section -->
+    <section class="content-section fade-in-up">
+        <div class="video-container">
+            <!-- Replace with actual video -->
+            <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #2d5550 0%, #1f4440 100%); display: flex; align-items: center; justify-content: center; color: var(--text-light); font-size: 1.5rem;">Video Demo Placeholder</div>
+        </div>
+        <p class="image-caption">Interactive prototype demonstration</p>
+    </section>
+
+    <!-- Key Features -->
+    <section class="content-section narrow fade-in-up">
+        <div class="section-label">KEY FEATURES</div>
+        <h2 class="section-title">What makes this solution unique</h2>
+        <div class="features-grid">
+            <div class="feature-item">
+                <div class="feature-number">01</div>
+                <h3 class="feature-title">Adaptive Interface</h3>
+                <p class="feature-description">The UI adapts to user skill level, progressively revealing advanced features as users become more comfortable with the system.</p>
+            </div>
+            <div class="feature-item">
+                <div class="feature-number">02</div>
+                <h3 class="feature-title">Smart Defaults</h3>
+                <p class="feature-description">Intelligent pre-configurations reduce decision fatigue while allowing full customization for power users.</p>
+            </div>
+            <div class="feature-item">
+                <div class="feature-number">03</div>
+                <h3 class="feature-title">Contextual Guidance</h3>
+                <p class="feature-description">In-context help and tooltips provide assistance exactly when needed without cluttering the interface.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Image Trio -->
+    <section class="content-section fade-in-up">
+        <div class="image-trio">
+            <div>
+                <div style="aspect-ratio: 3/4; background: linear-gradient(135deg, #2d5550 0%, #1f4440 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--text-light);">Detail 1</div>
+            </div>
+            <div>
+                <div style="aspect-ratio: 3/4; background: linear-gradient(135deg, #2d5550 0%, #1f4440 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--text-light);">Detail 2</div>
+            </div>
+            <div>
+                <div style="aspect-ratio: 3/4; background: linear-gradient(135deg, #2d5550 0%, #1f4440 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--text-light);">Detail 3</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quote -->
+    <section class="quote-section fade-in-up">
+        <blockquote>
+            <p class="quote-text">"This redesign has fundamentally changed how our team works. What used to take hours now takes minutes."</p>
+            <cite class="quote-author">— CLIENT NAME, TITLE</cite>
+        </blockquote>
+    </section>
+
+    <!-- Results -->
+    <section class="content-section narrow fade-in-up">
+        <div class="section-label">IMPACT</div>
+        <h2 class="section-title">Measurable results</h2>
+        <div class="results-grid">
+            <div class="result-item">
+                <div class="result-value">82%</div>
+                <div class="result-label">Faster Task Completion</div>
+            </div>
+            <div class="result-item">
+                <div class="result-value">95%</div>
+                <div class="result-label">User Satisfaction</div>
+            </div>
+            <div class="result-item">
+                <div class="result-value">60%</div>
+                <div class="result-label">Fewer Support Tickets</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Learnings -->
+    <section class="content-section narrow fade-in-up">
+        <div class="section-label">REFLECTIONS</div>
+        <h2 class="section-title">Key learnings</h2>
+        <p class="section-text">This project reinforced the importance of continuous user feedback throughout the design process. Early and frequent testing helped us identify and solve problems before they became costly to fix.</p>
+        <p class="section-text">Perhaps most importantly, we learned that simplification doesn't mean removing features—it means presenting complexity in a way that users can gradually discover and master.</p>
+    </section>
+
+    <!-- Next Project -->
+    <section class="project-navigation fade-in-up">
+        <div class="nav-label">NEXT PROJECT</div>
+        <a href="#" class="next-project">
+            <span class="next-project-title">Project Two</span>
+            <span class="next-arrow">→</span>
+        </a>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Will Brennan. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Menu functionality
+            const menuButton = document.querySelector('.menu-button');
+            const menuOverlay = document.querySelector('.menu-overlay');
+            const menuClose = document.querySelector('.menu-close');
+            const menuLinks = document.querySelectorAll('.menu-links a');
+
+            function openMenu() {
+                menuOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeMenu() {
+                menuOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+
+            menuButton.addEventListener('click', openMenu);
+            menuClose.addEventListener('click', closeMenu);
+
+            menuOverlay.addEventListener('click', (e) => {
+                if (e.target === menuOverlay) closeMenu();
+            });
+
+            menuLinks.forEach(link => {
+                link.addEventListener('click', closeMenu);
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && menuOverlay.classList.contains('active')) {
+                    closeMenu();
+                }
+            });
+
+            // Custom cursor
+            const cursorDot = document.querySelector('.cursor-dot');
+            let mouseX = 0, mouseY = 0, cursorX = 0, cursorY = 0;
+            const delay = 0.12;
+            
+            const interactiveSelectors = ['a', 'button', 'h1', 'h2', 'h3', '.logo'];
+            
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                cursorDot.classList.add('visible');
+            
+                const elementsUnderCursor = document.elementsFromPoint(e.clientX, e.clientY);
+                const interactiveElement = elementsUnderCursor.find(el => 
+                    el !== cursorDot && 
+                    interactiveSelectors.some(selector => el.matches(selector))
+                );
+                
+                if (interactiveElement) {
+                    cursorDot.classList.add('hovering');
+                } else {
+                    cursorDot.classList.remove('hovering');
+                }
+            });
+            
+            function animateCursor() {
+                cursorX += (mouseX - cursorX) * delay;
+                cursorY += (mouseY - cursorY) * delay;
+                
+                cursorDot.style.left = cursorX + 'px';
+                cursorDot.style.top = cursorY + 'px';
+                
+                requestAnimationFrame(animateCursor);
+            }
+            animateCursor();
+
+            document.addEventListener('click', () => {
+                cursorDot.classList.add('clicked');
+                setTimeout(() => cursorDot.classList.remove('clicked'), 300);
+            });
+        
+            document.addEventListener('mouseleave', () => {
+                cursorDot.classList.remove('visible', 'hovering');
+            });
+
+            // Scroll fade-in animations
+            const observerOptions = {
+                threshold: 0.15,
+                rootMargin: '0px 0px -80px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            const fadeElements = document.querySelectorAll('.fade-in-up');
+            fadeElements.forEach(element => observer.observe(element));
+
+            // Scroll fade effect for header proximity
+            const header = document.querySelector('header');
+            const headerHeight = header.offsetHeight;
+            const scrollFadeElements = document.querySelectorAll('.scroll-fade');
+            
+            function applyScrollFade() {
+                const fadeZone = 150;
+                const fadeStart = headerHeight + 150;
+                
+                scrollFadeElements.forEach(element => {
+                    const rect = element.getBoundingClientRect();
+                    const elementTop = rect.top;
+                    
+                    if (elementTop < fadeStart) {
+                        const distanceFromStart = fadeStart - elementTop;
+                        const fadeProgress = Math.min(distanceFromStart / fadeZone, 1);
+                        const opacityValue = Math.max(0, 1 - fadeProgress);
+                        
+                        element.style.opacity = opacityValue;
+                    } else {
+                        element.style.opacity = '1';
+                    }
+                });
+            }
+            
+            let scrollTimeout;
+            window.addEventListener('scroll', () => {
+                if (scrollTimeout) {
+                    window.cancelAnimationFrame(scrollTimeout);
+                }
+                scrollTimeout = window.requestAnimationFrame(applyScrollFade);
+            }, { passive: true });
+            
+            applyScrollFade();
+        });
+    </script>
+</body>
+</html>
