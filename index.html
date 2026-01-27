@@ -697,6 +697,17 @@
             opacity: 1;
         }
 
+        /* Section titles and footer text that animate on scroll should start hidden */
+        section .word-fade:not(.project-card .word-fade),
+        footer .word-fade {
+            visibility: hidden;
+        }
+
+        section .word-fade.visible:not(.project-card .word-fade),
+        footer .word-fade.visible {
+            visibility: visible;
+        }
+
         .project-card .word-fade {
             opacity: 0;
             transition: opacity 0.4s ease;
@@ -789,8 +800,8 @@
 
         .fade-in-up {
             opacity: 0;
-            transform: translateY(50px);
-            transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: translateY(30px);
+            transition: opacity 1.6s cubic-bezier(0.16, 1, 0.3, 1), transform 1.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .fade-in-up.visible {
@@ -1403,6 +1414,11 @@
                     // Add a slight delay for staggered effect
                     const delay = entry.target.dataset.delay || 0;
                     setTimeout(() => {
+                        // Handle word-fade elements (like section titles) - split BEFORE making visible
+                        if (entry.target.classList.contains('word-fade') && !entry.target.querySelector('.word') && !entry.target.closest('.project-card')) {
+                            splitTextIntoWords(entry.target, 0);
+                        }
+                        
                         entry.target.classList.add('visible');
                         
                         // If this is a project card, also trigger child animations with slight delay
@@ -1417,11 +1433,6 @@
                                     }
                                 }, 100 + (childIndex * 50));
                             });
-                        }
-                        
-                        // Handle word-fade elements
-                        if (entry.target.classList.contains('word-fade') && !entry.target.querySelector('.word')) {
-                            splitTextIntoWords(entry.target, 0);
                         }
                     }, delay);
                     // Unobserve after animation to improve performance
