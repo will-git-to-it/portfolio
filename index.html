@@ -511,10 +511,59 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 0 2rem;
-            max-width: 900px;
-            margin: 0 auto;
+            padding: 0 2.85rem;
             position: relative;
+            overflow: hidden;
+        }
+
+        .hero-gallery {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .hero-gallery-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .gallery-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #2d5550 0%, #1f4440 100%);
+            opacity: 0;
+            transition: opacity 2s ease-in-out, transform 8s ease-out;
+            transform: scale(1);
+        }
+
+        .gallery-image.active {
+            opacity: 0.4;
+            transform: scale(1.05);
+        }
+
+        body.inverted-theme .gallery-image.active {
+            opacity: 0.3;
+        }
+
+        .gallery-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .hero-content-wrapper {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            width: 100%;
         }
 
         .hero-content {
@@ -573,6 +622,15 @@
             opacity: 1;
         }
 
+        .project-card .word-fade {
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .project-card .word-fade.visible {
+            opacity: 1;
+        }
+
         .hero p {
             font-size: clamp(0.95rem, 1.5vw, 1.15rem);
             color: var(--text-light);
@@ -592,22 +650,54 @@
 
         /* Projects Section */
         .projects {
-            padding: 4rem 2rem 8rem;
+            padding: 4rem 2.85rem 8rem;
+        }
+
+        .projects-header-wrapper {
             max-width: 900px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .projects-grid-wrapper {
+            max-width: 1400px;
             margin: 0 auto;
         }
 
         .project-grid {
             display: grid;
-            gap: 6rem;
+            grid-template-columns: 1fr;
+            gap: 2.5rem;
             margin-top: 4rem;
         }
 
         .project-card {
-            display: grid;
-            grid-template-columns: 1.2fr 1fr;
-            gap: 4rem;
-            align-items: center;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            text-decoration: none;
+            color: inherit;
+            cursor: pointer;
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+        }
+
+        body.inverted-theme .project-card {
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+        }
+
+        body.inverted-theme .project-card:hover {
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
         }
 
         /* Fade-in on scroll animations */
@@ -633,90 +723,113 @@
             transform: translateY(0);
         }
 
-        /* Add staggered delay for child elements */
-        .project-card .project-info.fade-in-up {
-            transition-delay: 0.15s;
-        }
-
-        .project-card .project-image.fade-in-up {
-            transition-delay: 0.05s;
-        }
-
-        .project-card:nth-child(even) {
-            grid-template-columns: 1fr 1.2fr;
-        }
-
-        .project-card:nth-child(even) .project-image {
-            order: 2;
-        }
-
-        .project-image {
+        .project-image-wrapper {
             position: relative;
-            aspect-ratio: 16/10;
+            aspect-ratio: 21/9;
             background: linear-gradient(135deg, #2d5550 0%, #1f4440 100%);
-            border-radius: 4px;
             overflow: hidden;
-            cursor: pointer;
-            transition: none;
-            transform-style: preserve-3d;
-            perspective: 1000px;
-            transform: translateZ(0);
-            backface-visibility: hidden;
-            -webkit-backface-visibility: hidden;
-            display: block;
-            text-decoration: none;
         }
 
-        .project-image:hover {
-            transform: scale(1.02);
-        }
-        
-        .project-image.mouse-out {
-            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        .project-image::after {
-            content: 'VIEW PROJECT';
+        .project-image-wrapper::before {
+            content: '';
             position: absolute;
             inset: 0;
-            background: var(--accent);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--bg);
-            font-size: 0.9rem;
-            font-weight: 600;
-            letter-spacing: 0.15em;
-            opacity: 0;
-            transition: opacity 0.3s, background 0.4s ease, color 0.4s ease;
-            z-index: 2;
+            background: linear-gradient(135deg, #2d5550 0%, #1f4440 100%);
+            z-index: 0;
         }
 
-        .project-image:hover::after {
+        .project-image-wrapper::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .project-card:hover .project-image-wrapper::after {
             opacity: 1;
+        }
+
+        .project-image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: relative;
+            z-index: 1;
+            transition: transform 0.3s ease-out;
+            will-change: transform;
+            transform: scale(1.08);
+        }
+
+        .project-info {
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            background: #EDEDE1;
+            transition: background 0.4s ease;
+        }
+
+        body.inverted-theme .project-info {
+            background: #002F21;
+        }
+
+        .project-meta {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .project-category {
+            font-size: 0.7rem;
+            color: #1a3d33;
+            font-weight: 500;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            opacity: 0.8;
+            transition: color 0.4s ease;
+        }
+
+        body.inverted-theme .project-category {
+            color: #EDEDE1;
         }
 
         .project-info h3 {
             font-family: 'Tartuffo', serif;
-            font-size: clamp(2.25rem, 4vw, 3.25rem);
+            font-size: clamp(1.95rem, 3.25vw, 2.6rem);
             font-weight: 300;
-            margin-bottom: 1rem;
             letter-spacing: -0.02em;
+            line-height: 1.2;
+            margin: 0;
+            color: #002F21;
+            transition: color 0.4s ease;
+        }
+
+        body.inverted-theme .project-info h3 {
+            color: #EDEDE1;
         }
 
         .project-info p {
-            color: var(--text-light);
-            font-size: clamp(0.95rem, 2vw, 1.05rem);
-            line-height: 1.75;
-            margin-bottom: 1.5rem;
+            color: #1a3d33;
+            font-size: clamp(0.9rem, 1.1vw, 1rem);
+            line-height: 1.6;
             font-weight: 400;
+            margin: 0;
+            transition: color 0.4s ease;
+        }
+
+        body.inverted-theme .project-info p {
+            color: #EDEDE1;
         }
 
         .project-tags {
             display: flex;
             flex-wrap: wrap;
             gap: 0.75rem;
-            margin-top: 1.5rem;
+            margin-top: 0.5rem;
         }
 
         .tag {
@@ -728,7 +841,7 @@
 
         /* Footer */
         footer {
-            padding: 3rem 2rem;
+            padding: 3rem 2.85rem;
             text-align: center;
             border-top: 1px solid var(--border);
             font-size: 0.9rem;
@@ -738,27 +851,29 @@
         /* Responsive */
         @media (max-width: 1024px) {
             header {
-                padding: 1.5rem 2rem;
+                padding: 1.5rem 2.85rem;
+            }
+
+            .hero {
+                padding: 0 2.85rem;
             }
 
             .projects {
-                padding: 4rem 2rem 6rem;
+                padding: 4rem 2.85rem 6rem;
             }
 
-            .project-card,
-            .project-card:nth-child(even) {
-                grid-template-columns: 1fr;
-                gap: 2.5rem;
+            .project-info {
+                padding: 1.75rem;
             }
 
-            .project-card:nth-child(even) .project-image {
-                order: 1;
+            footer {
+                padding: 3rem 2.85rem;
             }
         }
 
         @media (max-width: 768px) {
             header {
-                padding: 1.5rem 1.5rem;
+                padding: 1.5rem 2rem;
             }
 
             nav {
@@ -771,7 +886,7 @@
 
             .menu-close {
                 top: 1.5rem;
-                right: 1.5rem;
+                right: 2rem;
                 font-size: 18px;
             }
 
@@ -786,26 +901,34 @@
             }
 
             .hero {
-                padding: 0 1.5rem;
+                padding: 0 2rem;
+            }
+
+            .gallery-image.active {
+                opacity: 0.25;
             }
 
             .projects {
-                padding: 4rem 1.5rem;
+                padding: 4rem 2rem;
             }
 
-            .project-card,
-            .project-card:nth-child(even) {
+            .project-grid {
+                grid-template-columns: 1fr;
                 gap: 2rem;
             }
 
+            .project-info {
+                padding: 1.5rem;
+            }
+
             footer {
-                padding: 2rem 1.5rem;
+                padding: 2rem 2rem;
             }
         }
 
         @media (max-width: 480px) {
             header {
-                padding: 1rem 1rem;
+                padding: 1rem 1.5rem;
             }
 
             .logo {
@@ -823,7 +946,7 @@
 
             .menu-close {
                 top: 1rem;
-                right: 1rem;
+                right: 1.5rem;
                 font-size: 16px;
             }
 
@@ -843,23 +966,40 @@
             }
 
             .hero {
-                padding: 0 1rem;
+                padding: 0 1.5rem;
+            }
+
+            .gallery-image.active {
+                opacity: 0.2;
             }
 
             .projects {
-                padding: 3rem 1rem;
+                padding: 3rem 1.5rem;
             }
 
-            .project-tags {
-                gap: 0.5rem;
+            .project-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
             }
 
-            .tag {
-                font-size: 0.75rem;
+            .project-card {
+                border-radius: 12px;
+            }
+
+            .project-info {
+                padding: 1.25rem;
+            }
+
+            .project-info h3 {
+                font-size: clamp(1.755rem, 6.5vw, 2.275rem);
+            }
+
+            .project-info p {
+                font-size: 0.9rem;
             }
 
             footer {
-                padding: 2rem 1rem;
+                padding: 2rem 1.5rem;
                 font-size: 0.85rem;
             }
         }
@@ -895,38 +1035,62 @@
     </div>
 
     <section class="hero">
-        <div class="hero-content">
-            <div class="hero-greeting">Hello! My name is Will.</div>
-            <h1>I create <span style="font-style: italic;">accessible, empathetic</span> experiences that empower people to do their best work.</h1>
+        <div class="hero-content-wrapper">
+            <div class="hero-content">
+                <div class="hero-greeting">Hello! My name is Will.</div>
+                <h1>I create <span style="font-style: italic;">accessible, empathetic</span> experiences that empower people to do their best work.</h1>
+            </div>
         </div>
     </section>
 
     <section class="projects" id="work">
-        <h2 class="section-title word-fade">Selected Work</h2>
-        <div class="project-grid">
-            <article class="project-card">
-                <a href="case-study.html" class="project-image fade-in-up"></a>
-                <div class="project-info fade-in-up">
+        <div class="projects-header-wrapper">
+            <h2 class="section-title word-fade">Selected work</h2>
+        </div>
+        <div class="projects-grid-wrapper">
+            <div class="project-grid">
+            <a href="case-study.html" class="project-card fade-in-up" data-delay="0">
+                <div class="project-image-wrapper">
+                    <img src="https://images.unsplash.com/photo-1558655146-d09347e92766?w=1400&h=600&fit=crop&q=80" alt="Project One">
+                </div>
+                <div class="project-info">
+                    <div class="project-meta">
+                        <span class="project-category">CASE STUDY</span>
+                        <span class="project-category">PRODUCT DESIGN</span>
+                    </div>
                     <h3 class="word-fade">Project One</h3>
                     <p class="word-fade">A comprehensive brand identity and digital platform for a sustainable fashion startup. The design emphasizes minimalism and eco-consciousness through natural colors and clean typography.</p>
                 </div>
-            </article>
+            </a>
 
-            <article class="project-card">
-                <div class="project-image fade-in-up"></div>
-                <div class="project-info fade-in-up">
+            <a href="case-study.html" class="project-card fade-in-up" data-delay="150">
+                <div class="project-image-wrapper">
+                    <img src="https://images.unsplash.com/photo-1541462608143-67571c6738dd?w=1400&h=600&fit=crop&q=80" alt="Project Two">
+                </div>
+                <div class="project-info">
+                    <div class="project-meta">
+                        <span class="project-category">CASE STUDY</span>
+                        <span class="project-category">UX DESIGN</span>
+                    </div>
                     <h3 class="word-fade">Project Two</h3>
                     <p class="word-fade">An interactive portfolio platform for a contemporary art gallery, featuring fluid animations and an elegant content management system for showcasing exhibitions.</p>
                 </div>
-            </article>
+            </a>
 
-            <article class="project-card">
-                <div class="project-image fade-in-up"></div>
-                <div class="project-info fade-in-up">
+            <a href="case-study.html" class="project-card fade-in-up" data-delay="300">
+                <div class="project-image-wrapper">
+                    <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1400&h=600&fit=crop&q=80" alt="Project Three">
+                </div>
+                <div class="project-info">
+                    <div class="project-meta">
+                        <span class="project-category">CASE STUDY</span>
+                        <span class="project-category">E-COMMERCE</span>
+                    </div>
                     <h3 class="word-fade">Project Three</h3>
                     <p class="word-fade">A mobile-first e-commerce experience for artisanal goods, built with performance and accessibility at its core. Features include advanced filtering and seamless checkout.</p>
                 </div>
-            </article>
+            </a>
+            </div>
         </div>
     </section>
 
@@ -1106,15 +1270,17 @@
                     setTimeout(() => {
                         entry.target.classList.add('visible');
                         
-                        // If this is a project card, also trigger child animations
+                        // If this is a project card, also trigger child animations with slight delay
                         if (entry.target.classList.contains('project-card')) {
-                            const children = entry.target.querySelectorAll('.fade-in-up, .fade-in-scroll, .word-fade');
-                            children.forEach(child => {
-                                child.classList.add('visible');
-                                // Split text into words for word-fade elements
-                                if (child.classList.contains('word-fade') && !child.querySelector('.word')) {
-                                    splitTextIntoWords(child, 0);
-                                }
+                            const children = entry.target.querySelectorAll('.word-fade');
+                            children.forEach((child, childIndex) => {
+                                setTimeout(() => {
+                                    child.classList.add('visible');
+                                    // Split text into words for word-fade elements
+                                    if (child.classList.contains('word-fade') && !child.querySelector('.word')) {
+                                        splitTextIntoWords(child, 0);
+                                    }
+                                }, 100 + (childIndex * 50));
                             });
                         }
                         
@@ -1132,42 +1298,15 @@
         // Observe all top-level fade-in elements and word-fade elements
         const topLevelFadeElements = document.querySelectorAll('.section-title, .contact .word-fade, footer .word-fade, .project-card');
         topLevelFadeElements.forEach((element, index) => {
+            // If it's a project card without a delay set, add incremental delay
+            if (element.classList.contains('project-card') && !element.dataset.delay) {
+                const projectCards = document.querySelectorAll('.project-card');
+                const cardIndex = Array.from(projectCards).indexOf(element);
+                element.dataset.delay = cardIndex * 150;
+            }
             observer.observe(element);
         });
 
-        // Mouse-responsive rotation for project images
-        const projectImages = document.querySelectorAll('.project-image');
-        
-        projectImages.forEach(image => {
-            image.addEventListener('mouseenter', () => {
-                // Remove transition class when mouse enters for instant response
-                image.classList.remove('mouse-out');
-            });
-            
-            image.addEventListener('mousemove', (e) => {
-                const rect = image.getBoundingClientRect();
-                const centerX = rect.left + rect.width / 2;
-                const centerY = rect.top + rect.height / 2;
-                
-                // Calculate mouse position relative to center (-1 to 1)
-                const mouseX = (e.clientX - centerX) / (rect.width / 2);
-                const mouseY = (e.clientY - centerY) / (rect.height / 2);
-                
-                // Calculate rotation angles (max ±12 degrees)
-                const rotateY = mouseX * 12;
-                const rotateX = -mouseY * 12;
-                
-                // Apply transform with scale (no transition during movement)
-                image.style.transform = `scale(1.02) perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-            });
-            
-            image.addEventListener('mouseleave', () => {
-                // Add transition class for smooth reset
-                image.classList.add('mouse-out');
-                // Reset rotation smoothly
-                image.style.transform = 'scale(1) perspective(1000px) rotateX(0deg) rotateY(0deg)';
-            });
-        });
 
         // Smooth scroll for navigation
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -1182,6 +1321,50 @@
             });
         });
 
+        // Parallax hover effect for project cards
+        const projectCards = document.querySelectorAll('.project-card');
+        console.log('Found project cards:', projectCards.length);
+        
+        projectCards.forEach((card, index) => {
+            const imageWrapper = card.querySelector('.project-image-wrapper');
+            if (!imageWrapper) {
+                console.log(`Card ${index}: No image wrapper found`);
+                return;
+            }
+            
+            const image = imageWrapper.querySelector('img');
+            if (!image) {
+                console.log(`Card ${index}: No image found`);
+                return;
+            }
+            
+            console.log(`Card ${index}: Setting up parallax for`, image);
+            
+            imageWrapper.addEventListener('mouseenter', () => {
+                console.log(`Card ${index}: Mouse entered`);
+            });
+            
+            imageWrapper.addEventListener('mousemove', (e) => {
+                const rect = imageWrapper.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const percentX = (x - centerX) / centerX;
+                const percentY = (y - centerY) / centerY;
+                
+                const moveX = percentX * 15;
+                const moveY = percentY * 15;
+                
+                image.style.transform = `translate(${moveX}px, ${moveY}px) scale(1.15)`;
+            });
+            
+            imageWrapper.addEventListener('mouseleave', () => {
+                image.style.transform = 'translate(0px, 0px) scale(1.08)';
+            });
+        });
 
     });
     </script>
