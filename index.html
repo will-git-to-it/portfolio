@@ -240,18 +240,35 @@
             justify-content: space-between;
             align-items: center;
             z-index: 1000;
-            background: transparent;
-            animation: slideDown 0.8s ease-out;
+            background: rgba(0, 47, 33, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid rgba(0, 47, 33, 0);
+            animation: fadeIn 0.8s ease-out;
+            transition: background 0.4s ease, border-bottom 0.4s ease;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='2.5' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.15'/%3E%3C/svg%3E");
+            opacity: 0.2;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        body.inverted-theme header {
+            background: rgba(237, 237, 225, 0.7);
+            border-bottom: 1px solid rgba(237, 237, 225, 0);
         }
 
 
-        @keyframes slideDown {
+        @keyframes fadeIn {
             from {
-                transform: translateY(-100%);
                 opacity: 0;
             }
             to {
-                transform: translateY(0);
                 opacity: 1;
             }
         }
@@ -262,9 +279,19 @@
             height: 26px;
         }
         
-        .logo img {
+        .logo svg {
             width: 100%;
             height: 100%;
+            display: block;
+        }
+
+        .logo svg path {
+            fill: var(--text-light);
+            transition: fill 0.4s ease;
+        }
+
+        body.inverted-theme .logo svg path {
+            fill: #002F21;
         }
 
         nav {
@@ -273,38 +300,88 @@
             align-items: center;
         }
 
+        .theme-toggle-wrapper {
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
         .theme-toggle {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border: 2px solid var(--border);
-            background: transparent;
+            width: 52px;
+            height: 28px;
+            border-radius: 14px;
+            border: 2px solid rgba(45, 85, 80, 0.4);
+            background: var(--bg);
             cursor: pointer;
             position: relative;
             transition: all 0.3s ease;
             padding: 0;
             display: flex;
             align-items: center;
-            justify-content: center;
+            box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.4), inset 0 -2px 4px rgba(0, 0, 0, 0.2);
         }
 
         .theme-toggle:hover {
             border-color: var(--accent);
-            transform: rotate(180deg);
         }
 
         .theme-toggle::before {
             content: '';
-            width: 16px;
-            height: 16px;
+            width: 20px;
+            height: 20px;
             border-radius: 50%;
-            background: var(--accent);
-            transition: transform 0.3s ease;
+            background: var(--text-light);
+            position: absolute;
+            left: 3px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
 
         body.inverted-theme .theme-toggle::before {
-            transform: scale(0.6);
+            left: calc(100% - 23px);
             background: var(--text);
+        }
+
+        body.inverted-theme .theme-toggle {
+            background: var(--accent);
+            border-color: rgba(124, 201, 168, 0.5);
+            box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.3), inset 0 -2px 4px rgba(0, 0, 0, 0.15);
+        }
+
+        .theme-tooltip {
+            position: absolute;
+            bottom: -45px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--text);
+            color: var(--bg);
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease, background 0.4s ease, color 0.4s ease;
+            z-index: 1001;
+        }
+
+        .theme-tooltip::before {
+            content: '';
+            position: absolute;
+            top: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-bottom: 5px solid var(--text);
+            transition: border-bottom-color 0.4s ease;
+        }
+
+        .theme-toggle-wrapper:hover .theme-tooltip {
+            opacity: 1;
         }
 
         .menu-button {
@@ -568,7 +645,6 @@
 
         .hero-content {
             width: 100%;
-            transform: translateY(5vh);
         }
 
         @keyframes fadeInUp {
@@ -590,8 +666,6 @@
             letter-spacing: -0.02em;
             color: var(--text);
             margin-bottom: 1rem;
-            opacity: 0;
-            animation: fadeInUp 1s ease-out 0.3s forwards;
         }
         
         .hero h1 {
@@ -605,6 +679,7 @@
             max-width: 100%;
         }
 
+        .hero-greeting .word,
         .hero h1 .word,
         .word-fade .word {
             display: inline-block;
@@ -799,13 +874,15 @@
 
         .project-info h3 {
             font-family: 'Tartuffo', serif;
-            font-size: clamp(1.95rem, 3.25vw, 2.6rem);
+            font-size: clamp(2.25rem, 3.75vw, 3rem);
             font-weight: 300;
-            letter-spacing: -0.02em;
+            letter-spacing: 0.01em;
             line-height: 1.2;
             margin: 0;
             color: #002F21;
             transition: color 0.4s ease;
+            font-kerning: normal;
+            text-rendering: optimizeLegibility;
         }
 
         body.inverted-theme .project-info h3 {
@@ -880,6 +957,20 @@
                 gap: 1.5rem;
             }
 
+            .theme-toggle {
+                width: 48px;
+                height: 26px;
+            }
+
+            .theme-toggle::before {
+                width: 18px;
+                height: 18px;
+            }
+
+            body.inverted-theme .theme-toggle::before {
+                left: calc(100% - 21px);
+            }
+
             .menu-button {
                 font-size: 18px;
             }
@@ -938,6 +1029,21 @@
 
             nav {
                 gap: 1rem;
+            }
+
+            .theme-toggle {
+                width: 44px;
+                height: 24px;
+            }
+
+            .theme-toggle::before {
+                width: 16px;
+                height: 16px;
+                left: 2px;
+            }
+
+            body.inverted-theme .theme-toggle::before {
+                left: calc(100% - 18px);
             }
 
             .menu-button {
@@ -1010,10 +1116,24 @@
 
     <header>
         <a href="index.html" class="logo">
-            <img src="logo.svg" alt="Logo">
+            <svg width="35" height="26" viewBox="0 0 35 26" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Logo">
+                <g clip-path="url(#clip0_2_7)">
+                    <path d="M35 4.33345C35 6.72657 33.0652 8.6669 30.6789 8.6669C29.2656 8.6669 28.0105 7.98666 27.2223 6.93436C26.6798 6.2099 26.3578 5.30993 26.3578 4.33415C26.3578 1.94103 28.2926 0.000701904 30.6789 0.000701904C33.0652 0.000701904 35 1.94103 35 4.33415V4.33345Z"/>
+                    <path d="M8.6422 0L17.7401 18.2485C19.516 21.8098 16.9337 26 12.9626 26L0 0H8.6422Z"/>
+                    <path d="M20.741 0L29.8389 18.2485C31.6148 21.8098 29.0325 26 25.0614 26L12.0988 0H20.741Z"/>
+                </g>
+                <defs>
+                    <clipPath id="clip0_2_7">
+                        <rect width="35" height="26" fill="white"/>
+                    </clipPath>
+                </defs>
+            </svg>
         </a>
         <nav>
-            <button class="theme-toggle" aria-label="Toggle theme"></button>
+            <div class="theme-toggle-wrapper">
+                <button class="theme-toggle" aria-label="Toggle theme"></button>
+                <span class="theme-tooltip">Theme</span>
+            </div>
             <button class="menu-button" aria-label="Open menu">Menu</button>
         </nav>
     </header>
@@ -1051,43 +1171,53 @@
             <div class="project-grid">
             <a href="case-study.html" class="project-card fade-in-up" data-delay="0">
                 <div class="project-image-wrapper">
-                    <img src="https://images.unsplash.com/photo-1558655146-d09347e92766?w=1400&h=600&fit=crop&q=80" alt="Project One">
+                    <img src="https://images.unsplash.com/photo-1558655146-d09347e92766?w=1400&h=600&fit=crop&q=80" alt="Agent 365">
                 </div>
                 <div class="project-info">
                     <div class="project-meta">
-                        <span class="project-category">CASE STUDY</span>
-                        <span class="project-category">PRODUCT DESIGN</span>
+                        <span class="project-category">MICROSOFT</span>
                     </div>
-                    <h3 class="word-fade">Project One</h3>
+                    <h3 class="word-fade">Agent 365</h3>
                     <p class="word-fade">A comprehensive brand identity and digital platform for a sustainable fashion startup. The design emphasizes minimalism and eco-consciousness through natural colors and clean typography.</p>
                 </div>
             </a>
 
             <a href="case-study.html" class="project-card fade-in-up" data-delay="150">
                 <div class="project-image-wrapper">
-                    <img src="https://images.unsplash.com/photo-1541462608143-67571c6738dd?w=1400&h=600&fit=crop&q=80" alt="Project Two">
+                    <img src="https://images.unsplash.com/photo-1541462608143-67571c6738dd?w=1400&h=600&fit=crop&q=80" alt="Viva Insights">
                 </div>
                 <div class="project-info">
                     <div class="project-meta">
-                        <span class="project-category">CASE STUDY</span>
-                        <span class="project-category">UX DESIGN</span>
+                        <span class="project-category">MICROSOFT</span>
                     </div>
-                    <h3 class="word-fade">Project Two</h3>
+                    <h3 class="word-fade">Viva Insights</h3>
                     <p class="word-fade">An interactive portfolio platform for a contemporary art gallery, featuring fluid animations and an elegant content management system for showcasing exhibitions.</p>
                 </div>
             </a>
 
             <a href="case-study.html" class="project-card fade-in-up" data-delay="300">
                 <div class="project-image-wrapper">
-                    <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1400&h=600&fit=crop&q=80" alt="Project Three">
+                    <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1400&h=600&fit=crop&q=80" alt="SharePoint">
                 </div>
                 <div class="project-info">
                     <div class="project-meta">
-                        <span class="project-category">CASE STUDY</span>
-                        <span class="project-category">E-COMMERCE</span>
+                        <span class="project-category">MICROSOFT</span>
                     </div>
-                    <h3 class="word-fade">Project Three</h3>
+                    <h3 class="word-fade">SharePoint</h3>
                     <p class="word-fade">A mobile-first e-commerce experience for artisanal goods, built with performance and accessibility at its core. Features include advanced filtering and seamless checkout.</p>
+                </div>
+            </a>
+
+            <a href="case-study.html" class="project-card fade-in-up" data-delay="450">
+                <div class="project-image-wrapper">
+                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1400&h=600&fit=crop&q=80" alt="MyDaily">
+                </div>
+                <div class="project-info">
+                    <div class="project-meta">
+                        <span class="project-category">STARBUCKS</span>
+                    </div>
+                    <h3 class="word-fade">MyDaily</h3>
+                    <p class="word-fade">A comprehensive design system and component library built to scale across multiple product teams, ensuring consistency and efficiency in the design process.</p>
                 </div>
             </a>
             </div>
@@ -1140,7 +1270,12 @@
                 }).join(' ');
             }
 
-            // Word-by-word animation for hero h1
+            // Word-by-word animation for hero greeting and h1
+            const heroGreeting = document.querySelector('.hero-greeting');
+            if (heroGreeting) {
+                splitTextIntoWords(heroGreeting, 0.3);
+            }
+            
             const heroHeading = document.querySelector('.hero h1');
             if (heroHeading) {
                 splitTextIntoWords(heroHeading, 0.5);
