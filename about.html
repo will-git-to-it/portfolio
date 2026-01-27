@@ -179,6 +179,14 @@
             --border: #2d5550;
         }
 
+        body.inverted-theme {
+            --bg: #EDEDE1;
+            --text: #002F21;
+            --text-light: #1a3d33;
+            --accent: #00875a;
+            --border: #c5c5b8;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -192,17 +200,18 @@
             line-height: 1.7;
             overflow-x: hidden;
             font-weight: 400;
+            transition: background 0.4s ease, color 0.4s ease;
         }
 
         .cursor-dot {
             width: 20px;
             height: 20px;
-            background: #EDEDE1;
+            background: var(--text-light);
             border-radius: 50%;
             position: fixed;
             pointer-events: none;
             z-index: 9999;
-            transition: transform 0.15s ease-out;
+            transition: transform 0.15s ease-out, background 0.4s ease;
             opacity: 0;
             transform: translate(-50%, -50%);
         }
@@ -259,6 +268,41 @@
         nav {
             display: flex;
             gap: 2.5rem;
+            align-items: center;
+        }
+
+        .theme-toggle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--border);
+            background: transparent;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-toggle:hover {
+            border-color: var(--accent);
+            transform: rotate(180deg);
+        }
+
+        .theme-toggle::before {
+            content: '';
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--accent);
+            transition: transform 0.3s ease;
+        }
+
+        body.inverted-theme .theme-toggle::before {
+            transform: scale(0.6);
+            background: var(--text);
         }
 
         .menu-button {
@@ -293,7 +337,11 @@
             justify-content: center;
             opacity: 0;
             visibility: hidden;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
+            transition: opacity 0.5s ease, visibility 0.5s ease, background 0.4s ease;
+        }
+
+        body.inverted-theme .menu-overlay {
+            background: rgba(237, 237, 225, 0.95);
         }
 
         .menu-overlay.active {
@@ -553,13 +601,14 @@
     </style>
 </head>
 <body>
-    <div class="cursor-dot"></div>
+    <!-- <div class="cursor-dot"></div> -->
 
     <header>
         <a href="index.html" class="logo">
             <img src="logo.svg" alt="Logo">
         </a>
         <nav>
+            <button class="theme-toggle" aria-label="Toggle theme"></button>
             <button class="menu-button" aria-label="Open menu">Menu</button>
         </nav>
     </header>
@@ -596,6 +645,27 @@
 
     <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Theme toggle functionality
+            const themeToggle = document.querySelector('.theme-toggle');
+            const body = document.body;
+            
+            // Check for saved theme preference
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'inverted') {
+                body.classList.add('inverted-theme');
+            }
+            
+            themeToggle.addEventListener('click', () => {
+                body.classList.toggle('inverted-theme');
+                
+                // Save preference
+                if (body.classList.contains('inverted-theme')) {
+                    localStorage.setItem('theme', 'inverted');
+                } else {
+                    localStorage.setItem('theme', 'default');
+                }
+            });
+
             // Menu overlay functionality
             const menuButton = document.querySelector('.menu-button');
             const menuOverlay = document.querySelector('.menu-overlay');
@@ -634,7 +704,7 @@
                 }
             });
 
-            // Custom cursor with delayed follow effect
+            /* // Custom cursor with delayed follow effect
             const cursorDot = document.querySelector('.cursor-dot');
             let currentHoveredElement = null;
             
@@ -702,6 +772,7 @@
                 cursorDot.classList.remove('hovering');
                 currentHoveredElement = null;
             });
+            */
         });
     </script>
 </body>

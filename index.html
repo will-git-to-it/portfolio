@@ -179,6 +179,14 @@
             --border: #2d5550;
         }
 
+        body.inverted-theme {
+            --bg: #EDEDE1;
+            --text: #002F21;
+            --text-light: #1a3d33;
+            --accent: #00875a;
+            --border: #c5c5b8;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -192,17 +200,18 @@
             line-height: 1.7;
             overflow-x: hidden;
             font-weight: 400;
+            transition: background 0.4s ease, color 0.4s ease;
         }
 
         .cursor-dot {
             width: 20px;
             height: 20px;
-            background: #EDEDE1;
+            background: var(--text-light);
             border-radius: 50%;
             position: fixed;
             pointer-events: none;
             z-index: 10000;
-            transition: transform 0.15s ease-out;
+            transition: transform 0.15s ease-out, background 0.4s ease;
             opacity: 0;
             transform: translate(-50%, -50%);
         }
@@ -235,21 +244,6 @@
             animation: slideDown 0.8s ease-out;
         }
 
-        /* Smooth performance for scroll effects - confined to top of page */
-        .hero-content,
-        .section-title,
-        .project-info h3,
-        .project-info p,
-        .project-tags {
-            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-            will-change: opacity, transform;
-        }
-        
-        /* Separate handling for images to avoid flickering */
-        .project-image {
-            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-            will-change: opacity, transform;
-        }
 
         @keyframes slideDown {
             from {
@@ -276,6 +270,41 @@
         nav {
             display: flex;
             gap: 2.5rem;
+            align-items: center;
+        }
+
+        .theme-toggle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--border);
+            background: transparent;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-toggle:hover {
+            border-color: var(--accent);
+            transform: rotate(180deg);
+        }
+
+        .theme-toggle::before {
+            content: '';
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--accent);
+            transition: transform 0.3s ease;
+        }
+
+        body.inverted-theme .theme-toggle::before {
+            transform: scale(0.6);
+            background: var(--text);
         }
 
         .menu-button {
@@ -311,7 +340,11 @@
             justify-content: center;
             opacity: 0;
             visibility: hidden;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
+            transition: opacity 0.5s ease, visibility 0.5s ease, background 0.4s ease;
+        }
+
+        body.inverted-theme .menu-overlay {
+            background: rgba(237, 237, 225, 0.95);
         }
 
         .menu-overlay::before {
@@ -646,7 +679,7 @@
             content: 'VIEW PROJECT';
             position: absolute;
             inset: 0;
-            background: rgba(124, 201, 168, 0.95);
+            background: var(--accent);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -655,7 +688,7 @@
             font-weight: 600;
             letter-spacing: 0.15em;
             opacity: 0;
-            transition: opacity 0.3s;
+            transition: opacity 0.3s, background 0.4s ease, color 0.4s ease;
             z-index: 2;
         }
 
@@ -833,13 +866,14 @@
     </style>
 </head>
 <body>
-    <div class="cursor-dot"></div>
+    <!-- <div class="cursor-dot"></div> -->
 
     <header>
         <a href="index.html" class="logo">
             <img src="logo.svg" alt="Logo">
         </a>
         <nav>
+            <button class="theme-toggle" aria-label="Toggle theme"></button>
             <button class="menu-button" aria-label="Open menu">Menu</button>
         </nav>
     </header>
@@ -875,11 +909,6 @@
                 <div class="project-info fade-in-up">
                     <h3 class="word-fade">Project One</h3>
                     <p class="word-fade">A comprehensive brand identity and digital platform for a sustainable fashion startup. The design emphasizes minimalism and eco-consciousness through natural colors and clean typography.</p>
-                    <div class="project-tags">
-                        <span class="tag">BRANDING</span>
-                        <span class="tag">WEB DESIGN</span>
-                        <span class="tag">DEVELOPMENT</span>
-                    </div>
                 </div>
             </article>
 
@@ -888,11 +917,6 @@
                 <div class="project-info fade-in-up">
                     <h3 class="word-fade">Project Two</h3>
                     <p class="word-fade">An interactive portfolio platform for a contemporary art gallery, featuring fluid animations and an elegant content management system for showcasing exhibitions.</p>
-                    <div class="project-tags">
-                        <span class="tag">UI/UX</span>
-                        <span class="tag">REACT</span>
-                        <span class="tag">ANIMATION</span>
-                    </div>
                 </div>
             </article>
 
@@ -901,11 +925,6 @@
                 <div class="project-info fade-in-up">
                     <h3 class="word-fade">Project Three</h3>
                     <p class="word-fade">A mobile-first e-commerce experience for artisanal goods, built with performance and accessibility at its core. Features include advanced filtering and seamless checkout.</p>
-                    <div class="project-tags">
-                        <span class="tag">E-COMMERCE</span>
-                        <span class="tag">MOBILE</span>
-                        <span class="tag">SHOPIFY</span>
-                    </div>
                 </div>
             </article>
         </div>
@@ -917,6 +936,27 @@
 
     <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Theme toggle functionality
+            const themeToggle = document.querySelector('.theme-toggle');
+            const body = document.body;
+            
+            // Check for saved theme preference
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'inverted') {
+                body.classList.add('inverted-theme');
+            }
+            
+            themeToggle.addEventListener('click', () => {
+                body.classList.toggle('inverted-theme');
+                
+                // Save preference
+                if (body.classList.contains('inverted-theme')) {
+                    localStorage.setItem('theme', 'inverted');
+                } else {
+                    localStorage.setItem('theme', 'default');
+                }
+            });
+
             // Function to split text into words with animation delays
             function splitTextIntoWords(element, baseDelay = 0) {
                 const text = element.innerHTML;
@@ -979,7 +1019,7 @@
                 }
             });
 
-            // Custom cursor with delayed follow effect
+            /* // Custom cursor with delayed follow effect
             const cursorDot = document.querySelector('.cursor-dot');
             console.log('Cursor dot element:', cursorDot);
             let currentHoveredElement = null;
@@ -1050,6 +1090,7 @@
                 cursorDot.classList.remove('hovering');
                 currentHoveredElement = null;
             });
+            */
 
         // Scroll animations for all fade-in elements
         const observerOptions = {
@@ -1141,71 +1182,6 @@
             });
         });
 
-        // Fade out effect - elements fully fade before reaching top nav
-        const header = document.querySelector('header');
-        const headerHeight = header.offsetHeight;
-        
-        const textElements = document.querySelectorAll('.hero-content, .section-title, .project-info h3, .project-info p, .project-tags');
-        const imageElements = document.querySelectorAll('.project-image');
-        
-        function applyScrollFade() {
-            // Text elements fade out completely before reaching header
-            const textFadeZone = 150; // Shorter fade distance
-            const textFadeStart = headerHeight + 150; // Smaller area before header
-            
-            textElements.forEach(element => {
-                const rect = element.getBoundingClientRect();
-                const elementTop = rect.top;
-                
-                // Fade completes exactly at headerHeight
-                if (elementTop < textFadeStart) {
-                    const distanceFromStart = textFadeStart - elementTop;
-                    const fadeProgress = Math.min(distanceFromStart / textFadeZone, 1);
-                    
-                    const opacityValue = Math.max(0, 1 - fadeProgress);
-                    
-                    element.style.opacity = opacityValue;
-                    element.style.transform = 'translateY(0)';
-                } else {
-                    element.style.opacity = '1';
-                    element.style.transform = 'translateY(0)';
-                }
-            });
-            
-            // Images fade over a shorter distance, staying visible longer
-            const imageFadeZone = 200; // Shorter fade zone
-            const imageFadeStart = headerHeight + 200; // Start closer to header
-            
-            imageElements.forEach(element => {
-                const rect = element.getBoundingClientRect();
-                const elementTop = rect.top;
-                
-                if (elementTop < imageFadeStart) {
-                    const distanceFromStart = imageFadeStart - elementTop;
-                    const fadeProgress = Math.min(distanceFromStart / imageFadeZone, 1);
-                    
-                    const opacityValue = Math.max(0, 1 - fadeProgress);
-                    
-                    element.style.opacity = opacityValue;
-                    element.style.transform = 'translateY(0)';
-                } else {
-                    element.style.opacity = '1';
-                    element.style.transform = 'translateY(0)';
-                }
-            });
-        }
-        
-        // Apply fade effect on scroll
-        let scrollTimeout;
-        window.addEventListener('scroll', () => {
-            if (scrollTimeout) {
-                window.cancelAnimationFrame(scrollTimeout);
-            }
-            scrollTimeout = window.requestAnimationFrame(applyScrollFade);
-        }, { passive: true });
-        
-        // Initial call to set up the effect
-        applyScrollFade();
 
     });
     </script>
