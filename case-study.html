@@ -151,7 +151,10 @@
         header::before {
             content: '';
             position: absolute;
-            inset: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='2.5' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.15'/%3E%3C/svg%3E");
             opacity: 0.2;
             pointer-events: none;
@@ -176,13 +179,20 @@
 
         .logo {
             display: block;
-            width: 35px;
-            height: 26px;
+            height: 24px;
+            width: auto;
+            color: var(--text-light);
+            transition: color 0.4s ease;
         }
-        
-        .logo img {
-            width: 100%;
+
+        .logo svg {
             height: 100%;
+            width: auto;
+            display: block;
+        }
+
+        body.inverted-theme .logo {
+            color: #002F21;
         }
 
         nav {
@@ -318,7 +328,10 @@
         .menu-overlay::before {
             content: '';
             position: absolute;
-            inset: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='2.5' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.15'/%3E%3C/svg%3E");
             opacity: 0.3;
             pointer-events: none;
@@ -793,7 +806,7 @@
 
             .theme-toggle {
                 width: 48px;
-                height: 26px;
+                height: 24px;
             }
 
             .theme-toggle::before {
@@ -850,8 +863,8 @@
             }
 
             .logo {
-                width: 30px;
                 height: 22px;
+                width: auto;
             }
 
             nav {
@@ -903,6 +916,41 @@
                 font-size: 0.85rem;
             }
         }
+
+        /* Fallback for browsers without backdrop-filter support */
+        @supports not (backdrop-filter: blur(1px)) {
+            header {
+                background: rgba(0, 47, 33, 0.96);
+            }
+            body.inverted-theme header {
+                background: rgba(237, 237, 225, 0.96);
+            }
+            .menu-overlay {
+                background: rgba(0, 47, 33, 0.97);
+            }
+            body.inverted-theme .menu-overlay {
+                background: rgba(237, 237, 225, 0.97);
+            }
+        }
+
+        /* Respect reduced motion preference */
+        @media (prefers-reduced-motion: reduce) {
+            .project-category,
+            .project-title,
+            .project-subtitle,
+            .project-meta {
+                opacity: 1;
+                animation: none;
+            }
+            .fade-in-up {
+                opacity: 1;
+                transform: none;
+                transition: none;
+            }
+            header {
+                animation: none;
+            }
+        }
     </style>
 </head>
 <body>
@@ -910,7 +958,12 @@
 
     <header>
         <a href="index.html" class="logo">
-            <img src="logo.svg" alt="Logo">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 593.69 80.69" fill="currentColor" aria-label="W. F. Brennan Design Co.">
+                <defs><style>.logo-cls-1{font-size:90px;letter-spacing:-.02em}.logo-cls-1,.logo-cls-2,.logo-cls-3{font-family:'Tartuffo',serif;font-weight:300}.logo-cls-2{font-size:72px}.logo-cls-3{font-size:48px;letter-spacing:-.02em}.logo-cls-4{letter-spacing:-.13em}.logo-cls-5{letter-spacing:-.14em}.logo-cls-6,.logo-cls-7,.logo-cls-8,.logo-cls-9,.logo-cls-10{letter-spacing:-.02em}.logo-cls-11{letter-spacing:-.05em}.logo-cls-12,.logo-cls-13,.logo-cls-14,.logo-cls-16{letter-spacing:-.04em}.logo-cls-15{letter-spacing:-.03em}</style></defs>
+                <text class="logo-cls-2" transform="translate(0 63.31)"><tspan class="logo-cls-4" x="0" y="0">W</tspan><tspan class="logo-cls-7" x="55.31" y="0">. </tspan><tspan class="logo-cls-5" x="77.51" y="0">F</tspan><tspan class="logo-cls-7" x="106.15" y="0">. </tspan><tspan class="logo-cls-11" x="128.35" y="0">B</tspan><tspan class="logo-cls-14" x="164.79" y="0">r</tspan><tspan class="logo-cls-13" x="189.13" y="0">e</tspan><tspan class="logo-cls-10" x="214.76" y="0">n</tspan><tspan class="logo-cls-13" x="248.08" y="0">n</tspan><tspan class="logo-cls-9" x="279.63" y="0">a</tspan><tspan class="logo-cls-6" x="309.51" y="0">n </tspan><tspan class="logo-cls-12" x="353.01" y="0">D</tspan><tspan class="logo-cls-15" x="394.38" y="0">e</tspan><tspan class="logo-cls-16" x="420.77" y="0">s</tspan><tspan class="logo-cls-10" x="444.12" y="0">i</tspan><tspan class="logo-cls-8" x="459.22" y="0">g</tspan><tspan class="logo-cls-7" x="489.17" y="0">n C</tspan></text>
+                <text class="logo-cls-1" transform="translate(570.78 48.15) scale(.58)"><tspan x="0" y="0">o</tspan></text>
+                <text class="logo-cls-3" transform="translate(577.85 56.8)"><tspan x="0" y="0">.</tspan></text>
+            </svg>
         </a>
         <nav>
             <div class="theme-toggle-wrapper">

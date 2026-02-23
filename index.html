@@ -251,7 +251,10 @@
         header::before {
             content: '';
             position: absolute;
-            inset: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='2.5' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.15'/%3E%3C/svg%3E");
             opacity: 0.2;
             pointer-events: none;
@@ -275,23 +278,20 @@
 
         .logo {
             display: block;
-            width: 35px;
-            height: 26px;
+            height: 24px;
+            width: auto;
+            color: var(--text-light);
+            transition: color 0.4s ease;
         }
         
         .logo svg {
-            width: 100%;
             height: 100%;
+            width: auto;
             display: block;
         }
 
-        .logo svg path {
-            fill: var(--text-light);
-            transition: fill 0.4s ease;
-        }
-
-        body.inverted-theme .logo svg path {
-            fill: #002F21;
+        body.inverted-theme .logo {
+            color: #002F21;
         }
 
         nav {
@@ -389,12 +389,13 @@
             font-weight: 300;
             font-size: 20px;
             letter-spacing: -0.02em;
+            line-height: 1;
             color: var(--text);
             background: none;
             border: none;
             cursor: pointer;
             padding: 0;
-            transition: opacity 0.3s;
+            transition: opacity 0.3s, color 0.4s ease;
         }
 
         .menu-button:hover {
@@ -427,7 +428,10 @@
         .menu-overlay::before {
             content: '';
             position: absolute;
-            inset: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='2.5' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.15'/%3E%3C/svg%3E");
             opacity: 0.3;
             pointer-events: none;
@@ -443,6 +447,11 @@
             text-align: center;
             transform: translateY(30px);
             transition: transform 0.5s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4rem;
         }
 
         .menu-overlay.active .menu-content {
@@ -450,19 +459,22 @@
         }
 
         .menu-close {
-            position: absolute;
+            position: fixed;
             top: 2rem;
             right: 2.85rem;
+            font-family: 'Tartuffo', serif;
+            font-weight: 300;
+            font-size: 20px;
+            letter-spacing: -0.02em;
+            line-height: 1;
+            color: var(--text);
             background: none;
             border: none;
-            color: var(--text);
-            font-family: 'Tartuffo', serif;
-            font-size: 20px;
-            font-weight: 300;
             cursor: pointer;
-            padding: 0.5rem;
-            transition: opacity 0.3s;
-            letter-spacing: -0.02em;
+            padding: 0;
+            margin: 0;
+            transition: opacity 0.3s, color 0.4s ease;
+            z-index: 10000;
         }
 
         .menu-close:hover {
@@ -525,7 +537,6 @@
         }
 
         .menu-social {
-            margin-top: 3rem;
             display: flex;
             justify-content: center;
             gap: 2rem;
@@ -588,7 +599,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 0 2.85rem;
+            padding: 12rem 2.85rem 8rem;
             position: relative;
             overflow: hidden;
         }
@@ -645,6 +656,17 @@
 
         .hero-content {
             width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .hero-text-block {
+            display: block;
+        }
+
+        .hero-text-block + .hero-text-block {
+            margin-top: 0.9em;
         }
 
         @keyframes fadeInUp {
@@ -665,7 +687,7 @@
             line-height: 1.2;
             letter-spacing: -0.02em;
             color: var(--text);
-            margin-bottom: 1rem;
+            margin-bottom: 0;
         }
         
         .hero h1 {
@@ -673,10 +695,11 @@
             font-size: clamp(1.75rem, 4.5vw, 3rem);
             font-weight: 100;
             line-height: 1.2;
-            margin-bottom: 1.5rem;
-            letter-spacing: -0.02em;
+            margin-top: 0;
+            margin-bottom: 0;
+            letter-spacing: -0.4px;
             color: var(--text-light);
-            max-width: 100%;
+            max-width: 720px;
         }
 
         .hero-greeting .word,
@@ -697,14 +720,17 @@
             opacity: 1;
         }
 
-        /* Section titles and footer text that animate on scroll should start hidden */
-        section .word-fade:not(.project-card .word-fade),
-        footer .word-fade {
+        /* Section titles that animate on scroll should start hidden */
+        section .word-fade:not(.project-card .word-fade) {
             visibility: hidden;
         }
 
-        section .word-fade.visible:not(.project-card .word-fade),
-        footer .word-fade.visible {
+        section .word-fade.visible:not(.project-card .word-fade) {
+            visibility: visible;
+        }
+
+        /* Footer should always be visible */
+        footer .word-fade {
             visibility: visible;
         }
 
@@ -812,6 +838,7 @@
         .project-image-wrapper {
             position: relative;
             aspect-ratio: 21/9;
+            min-height: 200px;
             background: linear-gradient(135deg, #2d5550 0%, #1f4440 100%);
             overflow: hidden;
         }
@@ -931,19 +958,22 @@
         footer {
             padding: 3rem 2.85rem;
             text-align: center;
-            border-top: 1px solid var(--border);
             font-size: 0.9rem;
             color: var(--text-light);
         }
 
         /* Responsive */
         @media (max-width: 1024px) {
+            .hero-content-wrapper {
+                max-width: 900px;
+            }
+
             header {
                 padding: 1.5rem 2.85rem;
             }
 
             .hero {
-                padding: 0 2.85rem;
+                padding: 12rem 2.85rem 8rem;
             }
 
             .projects {
@@ -960,6 +990,10 @@
         }
 
         @media (max-width: 768px) {
+            .hero-text-block + .hero-text-block {
+                margin-top: 0.65em;
+            }
+
             header {
                 padding: 1.5rem 2rem;
             }
@@ -970,7 +1004,7 @@
 
             .theme-toggle {
                 width: 48px;
-                height: 26px;
+                height: 24px;
             }
 
             .theme-toggle::before {
@@ -987,9 +1021,11 @@
             }
 
             .menu-close {
-                top: 1.5rem;
-                right: 2rem;
                 font-size: 18px;
+            }
+
+            .menu-content {
+                gap: 3rem;
             }
 
             .menu-links a {
@@ -999,11 +1035,10 @@
 
             .menu-social {
                 gap: 1.5rem;
-                margin-top: 2rem;
             }
 
             .hero {
-                padding: 0 2rem;
+                padding: 10rem 2rem 8rem;
             }
 
             .gallery-image.active {
@@ -1034,8 +1069,8 @@
             }
 
             .logo {
-                width: 30px;
                 height: 22px;
+                width: auto;
             }
 
             nav {
@@ -1062,9 +1097,11 @@
             }
 
             .menu-close {
-                top: 1rem;
-                right: 1.5rem;
                 font-size: 16px;
+            }
+
+            .menu-content {
+                gap: 2.5rem;
             }
 
             .menu-links a {
@@ -1075,7 +1112,6 @@
             .menu-social {
                 flex-direction: column;
                 gap: 1rem;
-                margin-top: 1.5rem;
             }
 
             .menu-social a {
@@ -1083,7 +1119,7 @@
             }
 
             .hero {
-                padding: 0 1.5rem;
+                padding: 8rem 1.5rem 6rem;
             }
 
             .gallery-image.active {
@@ -1120,6 +1156,44 @@
                 font-size: 0.85rem;
             }
         }
+
+        /* Fallback for browsers without backdrop-filter support */
+        @supports not (backdrop-filter: blur(1px)) {
+            header {
+                background: rgba(0, 47, 33, 0.96);
+            }
+            body.inverted-theme header {
+                background: rgba(237, 237, 225, 0.96);
+            }
+            .menu-overlay {
+                background: rgba(0, 47, 33, 0.97);
+            }
+            body.inverted-theme .menu-overlay {
+                background: rgba(237, 237, 225, 0.97);
+            }
+        }
+
+        /* Respect reduced motion preference */
+        @media (prefers-reduced-motion: reduce) {
+            .hero-greeting .word,
+            .hero h1 .word,
+            .word-fade .word {
+                opacity: 1;
+                animation: none;
+            }
+            section .word-fade:not(.project-card .word-fade) {
+                visibility: visible;
+            }
+            .fade-in-scroll,
+            .fade-in-up {
+                opacity: 1;
+                transform: none;
+                transition: none;
+            }
+            .project-card .word-fade {
+                opacity: 1;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1127,17 +1201,11 @@
 
     <header>
         <a href="index.html" class="logo">
-            <svg width="35" height="26" viewBox="0 0 35 26" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Logo">
-                <g clip-path="url(#clip0_2_7)">
-                    <path d="M35 4.33345C35 6.72657 33.0652 8.6669 30.6789 8.6669C29.2656 8.6669 28.0105 7.98666 27.2223 6.93436C26.6798 6.2099 26.3578 5.30993 26.3578 4.33415C26.3578 1.94103 28.2926 0.000701904 30.6789 0.000701904C33.0652 0.000701904 35 1.94103 35 4.33415V4.33345Z"/>
-                    <path d="M8.6422 0L17.7401 18.2485C19.516 21.8098 16.9337 26 12.9626 26L0 0H8.6422Z"/>
-                    <path d="M20.741 0L29.8389 18.2485C31.6148 21.8098 29.0325 26 25.0614 26L12.0988 0H20.741Z"/>
-                </g>
-                <defs>
-                    <clipPath id="clip0_2_7">
-                        <rect width="35" height="26" fill="white"/>
-                    </clipPath>
-                </defs>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 593.69 80.69" fill="currentColor" aria-label="W. F. Brennan Design Co.">
+                <defs><style>.logo-cls-1{font-size:90px;letter-spacing:-.02em}.logo-cls-1,.logo-cls-2,.logo-cls-3{font-family:'Tartuffo',serif;font-weight:300}.logo-cls-2{font-size:72px}.logo-cls-3{font-size:48px;letter-spacing:-.02em}.logo-cls-4{letter-spacing:-.13em}.logo-cls-5{letter-spacing:-.14em}.logo-cls-6,.logo-cls-7,.logo-cls-8,.logo-cls-9,.logo-cls-10{letter-spacing:-.02em}.logo-cls-11{letter-spacing:-.05em}.logo-cls-12,.logo-cls-13,.logo-cls-14,.logo-cls-16{letter-spacing:-.04em}.logo-cls-15{letter-spacing:-.03em}</style></defs>
+                <text class="logo-cls-2" transform="translate(0 63.31)"><tspan class="logo-cls-4" x="0" y="0">W</tspan><tspan class="logo-cls-7" x="55.31" y="0">. </tspan><tspan class="logo-cls-5" x="77.51" y="0">F</tspan><tspan class="logo-cls-7" x="106.15" y="0">. </tspan><tspan class="logo-cls-11" x="128.35" y="0">B</tspan><tspan class="logo-cls-14" x="164.79" y="0">r</tspan><tspan class="logo-cls-13" x="189.13" y="0">e</tspan><tspan class="logo-cls-10" x="214.76" y="0">n</tspan><tspan class="logo-cls-13" x="248.08" y="0">n</tspan><tspan class="logo-cls-9" x="279.63" y="0">a</tspan><tspan class="logo-cls-6" x="309.51" y="0">n </tspan><tspan class="logo-cls-12" x="353.01" y="0">D</tspan><tspan class="logo-cls-15" x="394.38" y="0">e</tspan><tspan class="logo-cls-16" x="420.77" y="0">s</tspan><tspan class="logo-cls-10" x="444.12" y="0">i</tspan><tspan class="logo-cls-8" x="459.22" y="0">g</tspan><tspan class="logo-cls-7" x="489.17" y="0">n C</tspan></text>
+                <text class="logo-cls-1" transform="translate(570.78 48.15) scale(.58)"><tspan x="0" y="0">o</tspan></text>
+                <text class="logo-cls-3" transform="translate(577.85 56.8)"><tspan x="0" y="0">.</tspan></text>
             </svg>
         </a>
         <nav>
@@ -1169,7 +1237,7 @@
         <div class="hero-content-wrapper">
             <div class="hero-content">
                 <div class="hero-greeting">Hello! My name is Will.</div>
-                <h1>I create <span style="font-style: italic;">accessible, empathetic</span> experiences that empower people to do their best work.</h1>
+                <h1><span class="hero-text-block">I create <span style="font-style: italic;">accessible, empathetic</span> experiences that empower people to do their best work.</span><span class="hero-text-block">I currently lead social and visual identity on Microsoft Agent 365.</span></h1>
             </div>
         </div>
     </section>
@@ -1236,7 +1304,7 @@
     </section>
 
     <footer>
-        <p class="word-fade">&copy; 2026 Will Brennan. All rights reserved.</p>
+        <p class="word-fade">Made in Seattle with Claude + Cursor. © Will Brennan 2026</p>
     </footer>
 
     <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
@@ -1264,21 +1332,24 @@
 
             // Function to split text into words with animation delays
             function splitTextIntoWords(element, baseDelay = 0) {
-                const text = element.innerHTML;
-                // Split by spaces but preserve HTML tags
-                const parts = text.split(/(<[^>]*>.*?<\/[^>]*>|\s+)/);
-                const words = parts.filter(part => part.trim() !== '');
-                
-                element.innerHTML = words.map((word, index) => {
-                    if (word.startsWith('<')) {
-                        // Handle HTML tags - wrap the entire tag
-                        return `<span class="word" style="animation-delay: ${baseDelay + index * 0.06}s">${word}</span>`;
-                    } else if (word.trim()) {
-                        // Regular word
-                        return `<span class="word" style="animation-delay: ${baseDelay + index * 0.06}s">${word}</span>`;
+                const html = element.innerHTML;
+                const sections = html.split(/(<br[^>]*>)/);
+                let delayIndex = 0;
+
+                element.innerHTML = sections.map(section => {
+                    if (section.match(/^<br[^>]*>$/)) {
+                        return section;
                     }
-                    return '';
-                }).join(' ');
+                    const parts = section.split(/(<[^>]*>.*?<\/[^>]*>|\s+)/);
+                    return parts.map(part => {
+                        if (!part || !part.trim()) {
+                            return '';
+                        }
+                        const result = `<span class="word" style="animation-delay: ${baseDelay + delayIndex * 0.06}s">${part}</span>`;
+                        delayIndex++;
+                        return result;
+                    }).join(' ');
+                }).join('');
             }
 
             // Word-by-word animation for hero greeting and h1
@@ -1289,7 +1360,14 @@
             
             const heroHeading = document.querySelector('.hero h1');
             if (heroHeading) {
-                splitTextIntoWords(heroHeading, 0.5);
+                const heroBlocks = heroHeading.querySelectorAll('.hero-text-block');
+                if (heroBlocks.length > 0) {
+                    heroBlocks.forEach((block, i) => {
+                        splitTextIntoWords(block, 0.5 + i * 0.5);
+                    });
+                } else {
+                    splitTextIntoWords(heroHeading, 0.5);
+                }
             }
             // Menu overlay functionality
             const menuButton = document.querySelector('.menu-button');
@@ -1442,7 +1520,7 @@
         }, observerOptions);
 
         // Observe all top-level fade-in elements and word-fade elements
-        const topLevelFadeElements = document.querySelectorAll('.section-title, .contact .word-fade, footer .word-fade, .project-card');
+        const topLevelFadeElements = document.querySelectorAll('.section-title, .contact .word-fade, .project-card');
         topLevelFadeElements.forEach((element, index) => {
             // If it's a project card without a delay set, add incremental delay
             if (element.classList.contains('project-card') && !element.dataset.delay) {
