@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+      font-size: 13px;
+      color: #1a1a1a;
+      background: #fff;
+      padding: 20px;
+    }
+
+    h1 { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+
+    .subtitle {
+      font-size: 12px;
+      color: #666;
+      line-height: 1.6;
+      margin-bottom: 18px;
+    }
+
+    code {
+      background: #f2f2f2;
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-family: 'SF Mono', 'Menlo', monospace;
+      font-size: 11px;
+    }
+
+    .step {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      margin-bottom: 10px;
+      font-size: 12px;
+      color: #444;
+      line-height: 1.5;
+    }
+
+    .step-num {
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #eee;
+      color: #555;
+      font-weight: 600;
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .drop-zone {
+      border: 2px dashed #ccc;
+      border-radius: 8px;
+      padding: 20px 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+      margin: 16px 0;
+    }
+
+    .drop-zone:hover { border-color: #18a0fb; }
+    .drop-zone.ready  { border-color: #1bc47d; background: #f0fff8; }
+    .drop-zone.error  { border-color: #f24822; background: #fff5f3; }
+
+    .drop-icon { font-size: 24px; margin-bottom: 6px; }
+    .drop-label { font-size: 13px; font-weight: 500; }
+    .drop-hint  { font-size: 11px; color: #999; margin-top: 4px; }
+    .file-list  { font-size: 11px; color: #555; margin-top: 8px; }
+
+    input[type="file"] { display: none; }
+
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 9px 12px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      transition: opacity 0.1s;
+    }
+
+    .btn:disabled { opacity: 0.45; cursor: default; }
+    .btn-primary  { background: #18a0fb; color: #fff; margin-bottom: 8px; }
+    .btn-primary:not(:disabled):hover { background: #0d8de8; }
+    .btn-secondary { background: #f0f0f0; color: #333; }
+    .btn-secondary:hover { background: #e4e4e4; }
+
+    #status {
+      margin-top: 12px;
+      font-size: 11px;
+      color: #888;
+      text-align: center;
+      min-height: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Portfolio Importer</h1>
+
+  <p class="subtitle">
+    Imports your portfolio pages as Figma frames (one per page × viewport).<br>
+    Run the export script first to generate the image files.
+  </p>
+
+  <div class="step">
+    <span class="step-num">1</span>
+    <span>In your terminal: <code>cd figma-export && npm install && npm run export</code></span>
+  </div>
+  <div class="step">
+    <span class="step-num">2</span>
+    <span>Select <strong>all files</strong> inside <code>figma-export/output/</code> below.</span>
+  </div>
+  <div class="step">
+    <span class="step-num">3</span>
+    <span>Click <strong>Import to Figma</strong> — frames will appear on the current page.</span>
+  </div>
+
+  <div class="drop-zone" id="dropZone">
+    <div class="drop-icon">📂</div>
+    <div class="drop-label">Click to select files</div>
+    <div class="drop-hint">Select all files in <code>figma-export/output/</code></div>
+    <input type="file" id="fileInput" multiple accept=".png,.json" />
+    <div class="file-list" id="fileList"></div>
+  </div>
+
+  <button class="btn btn-primary" id="importBtn" disabled>Import to Figma</button>
+  <button class="btn btn-secondary" id="cancelBtn">Cancel</button>
+
+  <div id="status"></div>
+
+  <script>
+    let parsedData = null;
+
+    const dropZone   = document.getElementById('dropZone');
+    const fileInput  = document.getElementById('fileInput');
+    const fileList   = document.getElementById('fileList');
+    const importBtn  = document.getElementById('importBtn');
+    const cancelBtn  = document.getElementById('cancelBtn');
+    const statusEl   = document.getElementById('status');
+
+    dropZone.addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', () => handleFiles(fileInput.files));
+
+    // Drag-and-drop support.
+    dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.style.borderColor = '#18a0fb'; });
+    dropZone.addEventListener('dragleave', () => { dropZone.style.borderColor = ''; });
+    dropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropZone.style.borderColor = '';
+      handleFiles(e.dataTransfer.files);
+    });
+
+    async function handleFiles(fileHandles) {
+      parsedData = null;
+      importBtn.disabled = true;
+      dropZone.classList.remove('ready', 'error');
+      fileList.textContent = `Reading ${fileHandles.length} file(s)…`;
+      statusEl.textContent = '';
+
+      const byName = {};
+      for (const f of fileHandles) {
+        byName[f.name] = f;
+      }
+
+      if (!byName['manifest.json']) {
+        dropZone.classList.add('error');
+        fileList.textContent = '⚠ manifest.json not found — select all files in output/';
+        return;
+      }
+
+      let manifest;
+      try {
+        manifest = JSON.parse(await byName['manifest.json'].text());
+      } catch {
+        dropZone.classList.add('error');
+        fileList.textContent = '⚠ Could not parse manifest.json';
+        return;
+      }
+
+      // Collect all image buffers referenced by the manifest.
+      const pages = [];
+      const missing = [];
+
+      for (const page of manifest.pages) {
+        const pageData = { name: page.name, files: [] };
+
+        for (const f of page.files) {
+          if (!byName[f.file]) {
+            missing.push(f.file);
+            continue;
+          }
+          const buf = await byName[f.file].arrayBuffer();
+          pageData.files.push({
+            viewport: f.viewport,
+            width: f.width,
+            height: f.height,
+            imageData: Array.from(new Uint8Array(buf)),
+          });
+        }
+
+        pages.push(pageData);
+      }
+
+      if (missing.length) {
+        dropZone.classList.add('error');
+        fileList.textContent = `⚠ Missing: ${missing.join(', ')}`;
+        return;
+      }
+
+      parsedData = pages;
+      const frameCount = pages.reduce((n, p) => n + p.files.length, 0);
+      dropZone.classList.add('ready');
+      fileList.textContent = `${frameCount} frame(s) ready across ${pages.length} page(s)`;
+      importBtn.disabled = false;
+    }
+
+    importBtn.addEventListener('click', () => {
+      if (!parsedData) return;
+      importBtn.disabled = true;
+      statusEl.textContent = 'Importing…';
+      parent.postMessage({ pluginMessage: { type: 'import', pages: parsedData } }, '*');
+    });
+
+    cancelBtn.addEventListener('click', () => {
+      parent.postMessage({ pluginMessage: { type: 'cancel' } }, '*');
+    });
+  </script>
+</body>
+</html>

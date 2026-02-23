@@ -1,0 +1,12 @@
+{
+  "name": "portfolio-figma-export",
+  "version": "1.0.0",
+  "description": "Screenshot portfolio pages for import into Figma via the Portfolio Importer plugin",
+  "type": "module",
+  "scripts": {
+    "export": "node export.js"
+  },
+  "dependencies": {
+    "puppeteer": "^21.0.0"
+  }
+}
